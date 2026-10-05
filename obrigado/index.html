@@ -1,0 +1,633 @@
+<!doctype html>
+<html lang="pt-BR">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="robots" content="noindex" />
+    <title>Obrigado · 365 Vezes Não Temas!</title>
+    <link rel="preload" href="../fonts/AbrilFatface-Regular.ttf" as="font" type="font/ttf" crossorigin />
+    <link
+      rel="stylesheet"
+      href="https://fonts.googleapis.com/css2?family=PT+Serif:ital,wght@0,400;0,700;1,400&display=swap"
+    />
+    <style>
+      /* Página de agradecimento da pré-venda. Mesmo sistema da landing page, escrita do celular para cima:
+         uma faixa floresta com o "OBRIGADO" desenhado, os próximos passos em papel e o fecho em sálvia. */
+      @font-face {
+        font-family: 'Abril Fatface';
+        src: url('../fonts/AbrilFatface-Regular.ttf') format('truetype');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Argent CF';
+        src: url('../fonts/ArgentCF-Thin.otf') format('opentype');
+        font-weight: 100;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Argent CF';
+        src: url('../fonts/ArgentCF-Light.otf') format('opentype');
+        font-weight: 300;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Argent CF';
+        src: url('../fonts/ArgentCF-Regular.otf') format('opentype');
+        font-weight: 400;
+        font-display: swap;
+      }
+      @font-face {
+        font-family: 'Argent CF';
+        src: url('../fonts/ArgentCF-Super.otf') format('opentype');
+        font-weight: 900;
+        font-display: swap;
+      }
+
+      :root {
+        --floresta: #323b28;
+        --salvia: #8e9b83;
+        --salvia-clara: #cdccbd;
+        --creme: #ead9c5;
+        --areia: #e5cdb1;
+        --papel: #ffffff;
+        --preto: #010101;
+        --erro: #8a2f14;
+        --fio-escuro: #55604a;
+        --font-display: 'Abril Fatface', Georgia, serif;
+        --font-editorial: 'Argent CF', Georgia, serif;
+        --font-apoio: 'PT Serif', Georgia, serif;
+        --gutter: 20px;
+        --faixa: 52px;
+        color-scheme: light;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      html {
+        -webkit-text-size-adjust: 100%;
+      }
+      body {
+        margin: 0;
+        background: var(--papel);
+        color: var(--preto);
+        font: 17px/1.6 var(--font-apoio);
+      }
+      img,
+      svg {
+        max-width: 100%;
+      }
+      img {
+        height: auto;
+        display: block;
+      }
+      p {
+        margin: 0;
+      }
+      a {
+        color: inherit;
+      }
+      h1,
+      h2 {
+        font-family: var(--font-display);
+        font-weight: 400;
+        margin: 0;
+        text-wrap: balance;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+      }
+      h1 {
+        font-size: clamp(30px, 8.4vw, 52px);
+        line-height: 0.98;
+      }
+      h2 {
+        font-size: clamp(28px, 7.4vw, 44px);
+        line-height: 1;
+        color: var(--floresta);
+      }
+      :focus-visible {
+        outline: 3px solid currentColor;
+        outline-offset: 3px;
+      }
+      [hidden] {
+        display: none !important;
+      }
+      .in {
+        max-width: 960px;
+        margin: 0 auto;
+        padding-inline: var(--gutter);
+      }
+      .olho {
+        font: 400 13px/1 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .faixa {
+        padding-block: var(--faixa);
+      }
+      .pilha {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      .centro {
+        align-items: center;
+        text-align: center;
+      }
+
+      .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 100%;
+        min-height: 54px;
+        font: 400 16px/1.1 var(--font-display);
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+        text-decoration: none;
+        text-align: center;
+        padding: 14px 22px;
+        background: var(--floresta);
+        color: var(--creme);
+        border: 1px solid var(--floresta);
+        cursor: pointer;
+        transition: background 0.18s ease-out, color 0.18s ease-out, transform 0.18s ease-out;
+        touch-action: manipulation;
+      }
+      .btn:hover {
+        background: var(--preto);
+        border-color: var(--preto);
+      }
+      .btn:active {
+        transform: scale(0.98);
+      }
+      .btn.claro {
+        background: var(--creme);
+        color: var(--floresta);
+        border-color: var(--creme);
+      }
+      .btn.claro:hover {
+        background: var(--papel);
+        border-color: var(--papel);
+      }
+      .btn.linha {
+        background: transparent;
+        color: var(--floresta);
+      }
+      .btn.linha:hover {
+        background: var(--floresta);
+        color: var(--creme);
+      }
+
+      /* Topo */
+      .barra {
+        background: var(--floresta);
+        color: var(--creme);
+        border-bottom: 1px solid var(--fio-escuro);
+      }
+      .barra a {
+        display: inline-flex;
+        align-items: center;
+        min-height: 52px;
+        font: 400 17px/1 var(--font-display);
+        text-transform: uppercase;
+        text-decoration: none;
+      }
+      .barra span {
+        color: var(--salvia);
+        margin-left: 0.3em;
+      }
+
+      /* Agradecimento */
+      .obrigado {
+        background: var(--floresta);
+        color: var(--creme);
+      }
+      .obrigado-palavra {
+        display: block;
+        width: 100%;
+        max-width: 760px;
+        height: auto;
+        overflow: visible;
+      }
+      .pad text {
+        font-family: var(--font-editorial);
+        font-size: 7.4px;
+        letter-spacing: -0.03em;
+        fill: var(--creme);
+      }
+      .w1 {
+        font-weight: 100;
+      }
+      .w3 {
+        font-weight: 300;
+      }
+      .w4 {
+        font-weight: 400;
+        font-style: italic;
+      }
+      .w9 {
+        font-weight: 900;
+      }
+      .palavra {
+        font-family: var(--font-display);
+        font-size: 132px;
+        letter-spacing: -0.04em;
+      }
+      .palavra-base {
+        fill: #46513a;
+      }
+      .obrigado .sub {
+        font-family: var(--font-editorial);
+        font-style: italic;
+        font-weight: 300;
+        font-size: 22px;
+        line-height: 1.2;
+        max-width: 24em;
+      }
+      .obrigado .olho {
+        background: var(--creme);
+        color: var(--floresta);
+        padding: 9px 13px;
+      }
+
+      /* Próximos passos */
+      .passos {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        border-top: 1px solid var(--floresta);
+        border-bottom: 1px solid var(--floresta);
+        counter-reset: passo;
+      }
+      .passos li {
+        counter-increment: passo;
+        padding: 22px 0 24px;
+        display: grid;
+        grid-template-columns: 56px minmax(0, 1fr);
+        gap: 4px 12px;
+        align-content: start;
+      }
+      .passos li + li {
+        border-top: 1px solid var(--floresta);
+      }
+      .passos li::before {
+        content: counter(passo);
+        grid-row: 1 / span 2;
+        font: 400 56px/0.85 var(--font-display);
+        color: var(--floresta);
+        letter-spacing: -0.03em;
+      }
+      .passos b {
+        font: 400 21px/1.1 var(--font-display);
+        color: var(--floresta);
+        text-transform: uppercase;
+      }
+      .passos p {
+        grid-column: 2;
+        font-size: 16px;
+        line-height: 1.45;
+      }
+      .pendente {
+        outline: 1px dashed var(--erro);
+        outline-offset: 4px;
+      }
+
+      /* Ajuda e presente */
+      .dupla {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 20px;
+        width: 100%;
+      }
+      .cartao {
+        border: 1px solid var(--floresta);
+        padding: 24px 20px 26px;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+        background: var(--papel);
+      }
+      .cartao.escuro {
+        background: var(--floresta);
+        color: var(--creme);
+      }
+      .cartao h3 {
+        font: 400 24px/1.05 var(--font-display);
+        margin: 0;
+        text-transform: uppercase;
+        letter-spacing: -0.02em;
+        color: var(--floresta);
+      }
+      .cartao.escuro h3 {
+        color: var(--creme);
+      }
+      .cartao .btn {
+        margin-top: auto;
+      }
+
+      /* Fecho */
+      .fecho {
+        background: var(--salvia);
+      }
+      .fecho blockquote {
+        margin: 0;
+        max-width: 16em;
+        font-family: var(--font-editorial);
+        font-style: italic;
+        font-weight: 300;
+        font-size: clamp(26px, 7.4vw, 44px);
+        line-height: 1.08;
+      }
+      .fecho cite {
+        font: 300 17px var(--font-editorial);
+        font-style: normal;
+      }
+
+      footer {
+        background: var(--floresta);
+        color: var(--salvia-clara);
+        padding-block: 32px 40px;
+        font-size: 14px;
+      }
+      footer .in {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        align-items: flex-start;
+      }
+      footer img {
+        width: 92px;
+      }
+
+      @media (min-width: 600px) {
+        :root {
+          --gutter: 24px;
+          --faixa: 72px;
+        }
+        .btn {
+          width: auto;
+          padding-inline: 30px;
+          font-size: 17px;
+        }
+        .obrigado .sub {
+          font-size: 26px;
+        }
+        .passos {
+          grid-template-columns: repeat(3, minmax(0, 1fr));
+        }
+        .passos li {
+          grid-template-columns: minmax(0, 1fr);
+          gap: 10px;
+          padding: 28px 22px 30px 0;
+        }
+        .passos li::before {
+          grid-row: auto;
+        }
+        .passos p {
+          grid-column: auto;
+        }
+        .passos li + li {
+          border-top: 0;
+          border-left: 1px solid var(--floresta);
+          padding-left: 22px;
+        }
+        .passos li:last-child {
+          padding-right: 0;
+        }
+        .dupla {
+          grid-template-columns: repeat(2, minmax(0, 1fr));
+        }
+        .cartao {
+          padding: 32px;
+        }
+        footer .in {
+          flex-direction: row;
+          align-items: center;
+          justify-content: space-between;
+        }
+      }
+      @media (min-width: 900px) {
+        :root {
+          --faixa: 88px;
+        }
+        h2 {
+          font-size: 48px;
+        }
+      }
+      @media (prefers-reduced-motion: reduce) {
+        .btn {
+          transition: none;
+        }
+        .btn:active {
+          transform: none;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <!-- ===================== CONFIGURAÇÃO =====================
+         Use os mesmos valores do bloco PREVENDA da landing page. -->
+    <script>
+      window.OBRIGADO = {
+        envio: '', // Ex.: "Envio a partir de 10 de dezembro de 2026". Vazio = aviso tracejado.
+        whatsapp: '556784661644', // só números, com 55 e DDD
+        whatsappExibir: '+55 67 8466-1644',
+        ga4Id: '', // o mesmo da landing page
+        metaPixelId: '', // o mesmo da landing page
+        valorPadrao: '' // valor do livro em número, ex. 69.90. Usado na medição se o checkout não mandar o valor no link.
+      }
+    </script>
+
+    <header class="barra">
+      <div class="in">
+        <a href="../" data-inicio>365 Vezes <span>Não Temas!</span></a>
+      </div>
+    </header>
+
+    <main>
+      <section class="faixa obrigado">
+        <div class="in pilha centro">
+          <span class="olho">Pedido recebido</span>
+          <svg class="obrigado-palavra" viewBox="0 0 700 112" role="img" aria-label="Obrigado">
+            <defs>
+              <pattern id="pad" width="160" height="27.6" patternUnits="userSpaceOnUse" class="pad">
+                <text x="0" y="7">
+                  <tspan class="w9">Não Temas”</tspan> <tspan class="w3">“Não Temas”</tspan><tspan class="w4">Não Temas”</tspan>
+                  <tspan class="w9">Não Temas”</tspan><tspan class="w1">“Não Temas”</tspan>
+                </text>
+                <text x="-42" y="16.2">
+                  <tspan class="w4">Não Temas”</tspan> <tspan class="w9">Não Temas”</tspan><tspan class="w3">“Não Temas”</tspan
+                  ><tspan class="w4">Não Temas”</tspan> <tspan class="w9">Não Temas”</tspan><tspan class="w1">“Não Temas”</tspan>
+                </text>
+                <text x="-88" y="25.4">
+                  <tspan class="w3">“Não Temas”</tspan><tspan class="w4">Não Temas”</tspan> <tspan class="w9">Não Temas”</tspan
+                  ><tspan class="w1">“Não Temas”</tspan><tspan class="w4">Não Temas”</tspan> <tspan class="w9">Não Temas”</tspan
+                  ><tspan class="w3">“Não Temas”</tspan>
+                </text>
+              </pattern>
+            </defs>
+            <text class="palavra palavra-base" x="350" y="104" text-anchor="middle">OBRIGADO</text>
+            <text class="palavra" x="350" y="104" text-anchor="middle" fill="url(#pad)">OBRIGADO</text>
+          </svg>
+          <h1>Seu exemplar está garantido</h1>
+          <p class="sub">Você acaba de reservar 365 dias ouvindo Deus dizer: não temas.</p>
+        </div>
+      </section>
+
+      <section class="faixa">
+        <div class="in pilha" style="gap: 28px">
+          <div class="pilha" style="gap: 14px">
+            <span class="olho">O que acontece agora</span>
+            <h2>Os próximos passos</h2>
+          </div>
+          <ol class="passos">
+            <li>
+              <b>Confirmação</b>
+              <p>
+                A confirmação do pedido chega no e-mail informado na compra. Se não aparecer em alguns minutos, olhe a
+                caixa de spam.
+              </p>
+            </li>
+            <li>
+              <b>Lançamento</b>
+              <p data-envio>Data de envio a definir.</p>
+            </li>
+            <li>
+              <b>Entrega</b>
+              <p>Quando o livro for enviado, você recebe as informações para acompanhar a entrega.</p>
+            </li>
+          </ol>
+        </div>
+      </section>
+
+      <section class="faixa" style="background: var(--areia)">
+        <div class="in">
+          <div class="dupla">
+            <div class="cartao">
+              <h3>Ficou com alguma dúvida?</h3>
+              <p>
+                Fale com a gente pelo WhatsApp, no número <span data-whats-numero></span>. Respondemos sobre o pedido, o
+                pagamento e a entrega.
+              </p>
+              <a class="btn" data-whats target="_blank" rel="noopener" href="#">Falar no WhatsApp</a>
+            </div>
+            <div class="cartao escuro">
+              <h3>E para quem você ama</h3>
+              <p>
+                Conhece alguém que precisa ouvir “não temas” todos os dias? A pré-venda continua aberta: garanta mais um
+                exemplar para presentear.
+              </p>
+              <a class="btn claro" href="../#oferta" data-inicio>Presentear alguém</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="faixa fecho">
+        <div class="in pilha centro">
+          <blockquote>“Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.”</blockquote>
+          <cite>Salmos 119:105 ARC</cite>
+        </div>
+      </section>
+    </main>
+
+    <footer>
+      <div class="in">
+        <img src="../img/essencia-418-claro.svg" alt="Editora Essência 4:18" width="92" height="75" />
+        <p>365 Vezes Não Temas! · Edmilson Oliveira · Edição 2027</p>
+      </div>
+    </footer>
+
+    <script>
+      ;(function () {
+        const O = window.OBRIGADO || {}
+        const all = (sel, fn) => document.querySelectorAll(sel).forEach(fn)
+
+        /* Aberta direto do computador (duplo clique), a pasta "../" não abre a página inicial sozinha:
+           nesse caso os links de volta apontam para o arquivo. No site publicado ficam limpos. */
+        if (location.protocol === 'file:')
+          all('[data-inicio]', a => {
+            a.href = a.getAttribute('href').replace('../', '../index.html')
+          })
+
+        /* Data de envio */
+        all('[data-envio]', e => {
+          if (O.envio) e.textContent = O.envio + '.'
+          else e.classList.add('pendente')
+        })
+
+        /* WhatsApp */
+        const msg = encodeURIComponent('Olá! Acabei de comprar o devocional 365 Vezes Não Temas! e tenho uma dúvida.')
+        all('[data-whats]', a => {
+          a.href = 'https://wa.me/' + (O.whatsapp || '') + '?text=' + msg
+        })
+        all('[data-whats-numero]', e => {
+          e.textContent = O.whatsappExibir || ''
+        })
+
+        /* Medição da compra: só dispara se a pessoa aceitou os cookies na landing page,
+           e uma única vez por pedido, mesmo que a página seja recarregada. */
+        let aceitou = false
+        try {
+          aceitou = localStorage.getItem('naotemas-cookies') === 'sim'
+        } catch (e) {}
+        if (!aceitou || (!O.ga4Id && !O.metaPixelId)) return
+
+        const q = new URLSearchParams(location.search)
+        const pedido = q.get('transaction_id') || q.get('pedido') || q.get('order_id') || ''
+        const valor = parseFloat(q.get('valor') || q.get('value') || O.valorPadrao) || undefined
+        const chave = 'naotemas-compra-' + (pedido || 'sem-id')
+        try {
+          if (sessionStorage.getItem(chave)) return
+          sessionStorage.setItem(chave, '1')
+        } catch (e) {}
+
+        if (O.ga4Id) {
+          window.dataLayer = window.dataLayer || []
+          function gtag() {
+            dataLayer.push(arguments)
+          }
+          const s = document.createElement('script')
+          s.async = true
+          s.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(O.ga4Id)
+          document.head.appendChild(s)
+          gtag('js', new Date())
+          gtag('config', O.ga4Id)
+          gtag('event', 'purchase', {
+            transaction_id: pedido || undefined,
+            value: valor,
+            currency: 'BRL',
+            items: [{ item_name: '365 Vezes Não Temas!', quantity: 1, price: valor }]
+          })
+        }
+        if (O.metaPixelId) {
+          !(function (f, b, e, v, n, t, s) {
+            if (f.fbq) return
+            n = f.fbq = function () {
+              n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+            }
+            if (!f._fbq) f._fbq = n
+            n.push = n
+            n.loaded = !0
+            n.version = '2.0'
+            n.queue = []
+            t = b.createElement(e)
+            t.async = !0
+            t.src = v
+            s = b.getElementsByTagName(e)[0]
+            s.parentNode.insertBefore(t, s)
+          })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js')
+          fbq('init', O.metaPixelId)
+          fbq('track', 'PageView')
+          fbq('track', 'Purchase', { value: valor || 0, currency: 'BRL' })
+        }
+      })()
+    </script>
+  </body>
+</html>
