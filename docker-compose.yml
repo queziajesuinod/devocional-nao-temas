@@ -1,0 +1,45 @@
+version: "3.8"
+
+# Stack do site 365 Vezes Não Temas! para Docker Swarm com Traefik.
+# Antes de publicar, troque SEU-DOMINIO.com.br nos dois lugares marcados abaixo.
+#
+#   docker build -t naotemas:latest .
+#   docker stack deploy -c docker-compose.yml naotemas
+
+services:
+  naotemas_site:
+    image: naotemas:latest
+    networks:
+      - network_public
+    deploy:
+      mode: replicated
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+        max_attempts: 3
+      placement:
+        constraints:
+          - node.role == manager
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=network_public
+
+        # www.SEU-DOMINIO.com.br -> redireciona para o endereço sem www
+        - traefik.http.routers.naotemas-www.rule=Host(`www.SEU-DOMINIO.com.br`)
+        - traefik.http.routers.naotemas-www.entrypoints=websecure
+        - traefik.http.routers.naotemas-www.tls.certresolver=letsencryptresolver
+        - traefik.http.routers.naotemas-www.middlewares=naotemas-redirect-www
+
+        - traefik.http.middlewares.naotemas-redirect-www.redirectregex.regex=^https://www\.(.*)
+        - traefik.http.middlewares.naotemas-redirect-www.redirectregex.replacement=https://$${1}
+        - traefik.http.middlewares.naotemas-redirect-www.redirectregex.permanent=true
+
+        # SEU-DOMINIO.com.br -> o site
+        - traefik.http.routers.naotemas.rule=Host(`SEU-DOMINIO.com.br`)
+        - traefik.http.routers.naotemas.entrypoints=websecure
+        - traefik.http.routers.naotemas.tls.certresolver=letsencryptresolver
+        - traefik.http.services.naotemas.loadbalancer.server.port=80
+
+networks:
+  network_public:
+    external: true
