@@ -750,6 +750,102 @@
         font-variant-numeric: tabular-nums;
       }
 
+      /* Lotes: empilhados no celular, lado a lado a partir de 600px */
+      .lotes {
+        list-style: none;
+        margin: 0;
+        padding: 0;
+        width: 100%;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr);
+        gap: 10px;
+      }
+      .lote {
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 2px 12px;
+        align-items: baseline;
+        padding: 16px 18px;
+        border: 1px solid var(--floresta);
+        background: var(--papel);
+        color: var(--floresta);
+      }
+      .lote-nome {
+        font: 400 13px/1 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .lote-estado {
+        font: 400 11px/1 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        text-align: right;
+      }
+      .lote-preco {
+        grid-column: 1 / -1;
+        font: 400 34px/1 var(--font-display);
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+        margin-top: 8px;
+      }
+      .lote-ate {
+        grid-column: 1 / -1;
+        font-size: 14px;
+        line-height: 1.3;
+        color: var(--preto);
+      }
+      /* lote em venda: bloco floresta, vem primeiro no celular */
+      .lote.atual {
+        order: -1;
+        background: var(--floresta);
+        color: var(--creme);
+        border-color: var(--floresta);
+      }
+      .lote.atual .lote-preco {
+        font-size: 44px;
+      }
+      .lote.atual .lote-ate {
+        color: var(--salvia-clara);
+      }
+      .lote.atual .lote-estado {
+        background: var(--creme);
+        color: var(--floresta);
+        padding: 6px 8px;
+      }
+      /* lote encerrado: apagado e riscado (o texto "Encerrado" diz o mesmo sem depender da cor) */
+      .lote.encerrado {
+        background: transparent;
+        border-style: dashed;
+        color: #4c4f44;
+      }
+      .lote.encerrado .lote-preco {
+        text-decoration: line-through;
+      }
+      .lote.encerrado .lote-ate {
+        color: #4c4f44;
+      }
+      .lote-etiqueta {
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 7px 10px;
+      }
+      @media (min-width: 600px) {
+        .lotes {
+          grid-template-columns: none;
+          grid-auto-flow: column;
+          grid-auto-columns: minmax(0, 1fr);
+          gap: 14px;
+          align-items: stretch;
+        }
+        .lote {
+          padding: 20px 22px 22px;
+          align-content: start;
+        }
+        .lote.atual {
+          order: 0;
+        }
+      }
+
       /* Avise-me: campo e botão empilhados */
       .aviseme form {
         display: grid;
@@ -1197,6 +1293,14 @@
         }
       }
 
+      /* Com o menu na mesma linha, a contagem só cabe na barra em telas bem largas;
+         abaixo disso ela continua aparecendo no cartão da oferta. */
+      @media (min-width: 1100px) and (max-width: 1439px) {
+        .barra .contagem {
+          display: none;
+        }
+      }
+
       @media (prefers-reduced-motion: reduce) {
         html {
           scroll-behavior: auto;
@@ -1227,6 +1331,22 @@
         brinde: '', // Ex.: "Marcador de página exclusivo da pré-venda"
         fimPrevenda: '', // data e hora em que a pré-venda acaba, para a contagem. Ex.: "2026-11-30T23:59:00-03:00"
         garantia: '', // Ex.: "7 dias para desistir da compra, conforme o Código de Defesa do Consumidor"
+
+        // Lotes (opcional). Com lotes preenchidos, o preço, as parcelas, o link e a contagem
+        // passam a vir do lote atual, e precoPor / parcelas / linkCheckout / fimPrevenda acima são ignorados.
+        // Para vender sem lotes, deixe a lista vazia: lotes: []
+        //   nome:     como aparece na página
+        //   preco:    Ex.: "R$ 59,90"
+        //   parcelas: opcional. Ex.: "ou 3x de R$ 19,97"
+        //   fim:      data e hora em que o lote acaba. Ex.: "2026-10-31T23:59:00-03:00". A página troca de lote sozinha.
+        //   link:     página de pagamento deste lote. Vazio = usa linkCheckout.
+        //   esgotado: true encerra o lote antes da data (para lote por quantidade).
+        lotes: [
+          { nome: '1º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false },
+          { nome: '2º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false },
+          { nome: '3º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false }
+        ],
+        loteAtual: 0, // 0 = a página decide pelas datas. 1, 2, 3… força esse lote (troca manual).
 
         // Conteúdo (opcionais)
         autor: { foto: '', frase: '', bio: '' }, // foto: caminho da imagem 4:5, ex. "img/autor.jpg"; frase: uma citação curta; bio: texto, com linha em branco entre parágrafos
@@ -1277,6 +1397,7 @@
               uma frase para levar com você.
             </p>
             <div class="compra">
+              <span class="olho lote-etiqueta" data-lote-nome hidden></span>
               <a class="btn grande" data-cta="hero" href="#oferta"
                 >Garantir o meu na pré-venda</a
               >
@@ -1499,6 +1620,7 @@
               janeiro com ele na mão.
             </p>
           </div>
+          <ol class="lotes" data-lotes aria-label="Lotes da pré-venda" hidden></ol>
           <div class="oferta-card">
             <img
               src="img/livros-grade.jpg"
@@ -1517,6 +1639,7 @@
                 <li>Formato 15,3 × 22,6 cm · Editora Essência 4:18</li>
                 <li class="brinde" data-brinde hidden></li>
               </ul>
+              <span class="olho lote-etiqueta" data-lote-nome hidden></span>
               <div class="preco">
                 <span class="de" data-preco-de hidden></span>
                 <span class="por" data-preco-por></span>
@@ -1705,6 +1828,78 @@
         const all = (sel, fn) => document.querySelectorAll(sel).forEach(fn)
         const faltando = []
 
+        /* ---------- Lotes: decide o lote em venda e passa preço, parcelas, link e prazo para o resto ---------- */
+        const lotes = Array.isArray(P.lotes) ? P.lotes.filter(l => l && l.nome) : []
+        let prefixoContagem = 'Pré-venda termina em '
+        let recarregarNoFim = false
+        if (lotes.length) {
+          const agora = Date.now()
+          const fimDe = l => {
+            const d = l.fim ? new Date(l.fim) : null
+            return d && !isNaN(d) ? d : null
+          }
+          const acabou = l => !!l.esgotado || (fimDe(l) && fimDe(l) <= agora)
+          let iAtual = -1
+          if (P.loteAtual >= 1 && P.loteAtual <= lotes.length) iAtual = P.loteAtual - 1
+          else iAtual = lotes.findIndex(l => !acabou(l))
+          const atual = iAtual >= 0 ? lotes[iAtual] : null
+
+          const dia = d => d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+          const lista = document.querySelector('[data-lotes]')
+          lotes.forEach((l, i) => {
+            const estado = i === iAtual ? 'atual' : iAtual < 0 || i < iAtual || acabou(l) ? 'encerrado' : 'breve'
+            const li = document.createElement('li')
+            li.className = 'lote ' + estado
+            if (estado === 'atual') li.setAttribute('aria-current', 'true')
+            const nome = document.createElement('span')
+            nome.className = 'lote-nome'
+            nome.textContent = l.nome
+            const est = document.createElement('span')
+            est.className = 'lote-estado'
+            est.textContent = { atual: 'Disponível agora', encerrado: l.esgotado ? 'Esgotado' : 'Encerrado', breve: 'Em breve' }[estado]
+            const preco = document.createElement('span')
+            preco.className = 'lote-preco'
+            preco.textContent = l.preco || 'R$ —'
+            if (!l.preco) preco.classList.add('pendente')
+            const ate = document.createElement('span')
+            ate.className = 'lote-ate'
+            const f = fimDe(l)
+            const ant = i > 0 ? fimDe(lotes[i - 1]) : null
+            ate.textContent =
+              estado === 'breve' && ant ? 'a partir de ' + dia(ant) + (f ? ', até ' + dia(f) : '')
+              : f ? 'até ' + dia(f)
+              : i === lotes.length - 1 ? 'até o lançamento' : 'data a definir'
+            if (l.parcelas && estado === 'atual') ate.textContent += ' · ' + l.parcelas
+            li.append(nome, est, preco, ate)
+            lista.append(li)
+          })
+          lista.hidden = false
+
+          if (atual) {
+            P.precoPor = atual.preco || ''
+            P.parcelas = atual.parcelas || ''
+            if (atual.link) P.linkCheckout = atual.link
+            P.fimPrevenda = atual.fim || ''
+            prefixoContagem = atual.nome + ' termina em '
+            recarregarNoFim = iAtual < lotes.length - 1
+            // o lote seguinte, mais caro, serve de "preço de" quando não há precoDe
+            const prox = lotes[iAtual + 1]
+            if (!P.precoDe && prox && prox.preco) P.precoDe = prox.preco
+            all('[data-lote-nome]', e => {
+              e.textContent = atual.nome
+              e.hidden = false
+            })
+          } else {
+            P.precoPor = 'Encerrada'
+            P.parcelas = ''
+            P.fimPrevenda = ''
+            all('[data-lote-nome]', e => {
+              e.textContent = 'Pré-venda encerrada'
+              e.hidden = false
+            })
+          }
+        }
+
         /* ---------- Medição: tudo passa por evento(); só sai daqui se a pessoa aceitar ---------- */
         window.dataLayer = window.dataLayer || []
         function gtag() {
@@ -1869,6 +2064,11 @@
           const tick = () => {
             const ms = fim - Date.now()
             if (ms <= 0) {
+              // fim de um lote com outro na sequência: recarrega para mostrar o novo preço
+              if (recarregarNoFim) {
+                location.reload()
+                return false
+              }
               all('[data-contagem]', e => {
                 e.textContent = 'Pré-venda encerrada'
                 e.hidden = false
@@ -1879,7 +2079,7 @@
               h = Math.floor(ms / 36e5) % 24,
               m = Math.floor(ms / 6e4) % 60
             const txt =
-              'Pré-venda termina em ' +
+              prefixoContagem +
               (d ? d + (d === 1 ? ' dia ' : ' dias ') : '') +
               h +
               'h ' +
