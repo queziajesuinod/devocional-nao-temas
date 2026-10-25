@@ -13,7 +13,7 @@
       property="og:description"
       content="Uma mensagem para cada dia de 2027. Garanta o seu na pré-venda."
     />
-    <meta property="og:image" content="img/livro-areia.jpg" />
+    <meta property="og:image" content="img/devocional-areia.jpg" />
     <link
       rel="preload"
       href="fonts/AbrilFatface-Regular.ttf"
@@ -74,6 +74,8 @@
         --font-display: 'Abril Fatface', Georgia, serif;
         --font-editorial: 'Argent CF', Georgia, serif;
         --font-apoio: 'PT Serif', Georgia, serif;
+        --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, Helvetica,
+          Arial, sans-serif;
         --gutter: 20px;
         --faixa: 56px;
         color-scheme: light;
@@ -191,7 +193,10 @@
         border: 1px solid var(--floresta);
         border-radius: 0;
         cursor: pointer;
-        transition: background 0.18s ease-out, color 0.18s ease-out, transform 0.18s ease-out;
+        transition:
+          background 0.18s ease-out,
+          color 0.18s ease-out,
+          transform 0.18s ease-out;
         touch-action: manipulation;
       }
       .btn:hover {
@@ -303,21 +308,63 @@
         text-underline-offset: 6px;
       }
 
-      /* Primeira tela: foto, título, preço e botão, nessa ordem */
+      /* Primeira tela: foto sangrando a borda, depois título, preço e botão.
+         No computador a foto ocupa a metade direita da tela, de cima a baixo. */
       .hero {
         background: var(--areia);
-      }
-      .hero .in {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        gap: 20px;
-        padding-block: 8px 40px;
       }
-      .hero-img {
-        order: -1;
+      .hero .in {
+        order: 2;
         width: 100%;
-        max-width: 280px;
-        margin-inline: auto;
+        padding-block: 28px 44px;
+      }
+      .hero-foto {
+        position: relative;
+        margin: 0;
+        aspect-ratio: 1 / 1;
+        overflow: hidden;
+        background: var(--creme);
+      }
+      .hero-foto img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: 50% 42%;
+      }
+      .hero-selo {
+        position: absolute;
+        left: var(--gutter);
+        bottom: 16px;
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 9px 13px;
+      }
+      .hero-fatos {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 14px 28px;
+        margin: 8px 0 0;
+        padding-top: 18px;
+        border-top: 1px solid var(--floresta);
+        width: 100%;
+      }
+      .hero-fatos div {
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+      }
+      .hero-fatos dt {
+        font: 400 30px/1 var(--font-display);
+        color: var(--floresta);
+        letter-spacing: -0.02em;
+      }
+      .hero-fatos dd {
+        margin: 0;
+        font: 400 11px/1.2 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
       }
       .hero-txt {
         display: flex;
@@ -372,7 +419,10 @@
         outline-offset: 4px;
       }
       .aviso-config {
-        font: 13px/1.4 ui-monospace, Consolas, monospace;
+        font:
+          13px/1.4 ui-monospace,
+          Consolas,
+          monospace;
         color: var(--erro);
         background: #fff;
         padding: 8px 10px;
@@ -452,8 +502,8 @@
       .medo-base {
         fill: #46513a;
       }
-      .base-salvia {
-        fill: var(--salvia-profunda);
+      .base-floresta {
+        fill: var(--floresta);
       }
 
       /* Medos: no celular, uma palavra por linha */
@@ -503,6 +553,93 @@
       }
       #medo .resposta + .btn {
         align-self: center;
+      }
+
+      /* Foto com bloco de cor deslocado atrás, como a lombada atrás da capa */
+      .foto-bloco {
+        position: relative;
+        width: 100%;
+        max-width: 460px;
+        justify-self: center;
+        margin: 0;
+        padding: 0 16px 16px 0;
+      }
+      .foto-bloco::before {
+        content: '';
+        position: absolute;
+        inset: 16px 0 0 16px;
+        background: var(--bloco, var(--salvia));
+      }
+      .foto-bloco .moldura {
+        position: relative;
+        aspect-ratio: 4 / 5;
+        overflow: hidden;
+        background: var(--creme);
+      }
+      .foto-bloco .moldura img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      /* leve aproximação da foto ao passar o mouse */
+      .zoom img {
+        transition: transform 0.7s cubic-bezier(0.2, 0.6, 0.2, 1);
+      }
+      @media (hover: hover) {
+        .zoom:hover img {
+          transform: scale(1.035);
+        }
+      }
+
+      /* Entrada suave das fotos ao rolar (só com JavaScript e sem pedido de menos movimento) */
+      .js-revela .revela {
+        opacity: 0;
+        transform: translateY(28px);
+        transition:
+          opacity 0.8s ease-out,
+          transform 0.8s cubic-bezier(0.2, 0.6, 0.2, 1);
+      }
+      .js-revela .revela.visivel {
+        opacity: 1;
+        transform: none;
+      }
+      /* conteúdo de cada faixa entra em cascata, um item depois do outro */
+      .js-revela .revela {
+        transition-delay: calc(var(--i, 0) * 110ms);
+      }
+      /* primeira tela: o texto sobe e a foto se acomoda ao abrir a página */
+      @media (prefers-reduced-motion: no-preference) {
+        .hero-txt > * {
+          animation: subir 0.9s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+        }
+        .hero-txt > :nth-child(2) {
+          animation-delay: 0.08s;
+        }
+        .hero-txt > :nth-child(3) {
+          animation-delay: 0.16s;
+        }
+        .hero-txt > :nth-child(4) {
+          animation-delay: 0.24s;
+        }
+        .hero-txt > :nth-child(n + 5) {
+          animation-delay: 0.32s;
+        }
+        .hero-foto img {
+          animation: assentar 1.6s cubic-bezier(0.2, 0.6, 0.2, 1) both;
+        }
+      }
+      @keyframes subir {
+        from {
+          opacity: 0;
+          transform: translateY(26px);
+        }
+      }
+      @keyframes assentar {
+        from {
+          transform: scale(1.08);
+        }
       }
 
       /* O que você recebe */
@@ -702,21 +839,65 @@
         color: var(--floresta);
       }
 
-      /* Oferta: foto em cima, compra embaixo */
-      .oferta-card {
+      /* Pré-venda: foto (presa ao rolar, no computador), cartão de compra em destaque
+         e os lotes como uma linha do tempo. No celular tudo empilha nessa mesma ordem. */
+      .oferta {
         display: grid;
         grid-template-columns: minmax(0, 1fr);
-        background: var(--papel);
-        border: 1px solid var(--floresta);
-        width: 100%;
+        gap: 24px;
       }
-      .oferta-card > img {
+      .oferta-topo {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        align-items: flex-start;
+      }
+      .oferta-topo h2 {
+        color: var(--floresta);
+      }
+      .oferta-topo p {
+        max-width: 30em;
+      }
+      .oferta-foto {
+        position: relative;
+        margin: 0;
+        aspect-ratio: 4 / 3;
+        overflow: hidden;
+        background: var(--creme);
+        min-width: 0;
+      }
+      .oferta-foto > img {
         width: 100%;
         height: 100%;
         object-fit: cover;
-        aspect-ratio: 16 / 10;
+        object-position: 50% 55%;
       }
-      .oferta-txt {
+      /* copo recortado sobre a foto, lembrando o brinde */
+      .oferta-copo {
+        position: absolute;
+        right: 14px;
+        bottom: 14px;
+        display: flex;
+        align-items: flex-end;
+        gap: 8px;
+      }
+      .oferta-copo img {
+        width: 64px;
+        filter: drop-shadow(0 10px 14px rgba(1, 1, 1, 0.28));
+      }
+      .oferta-copo span {
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 7px 10px;
+        font: 400 11px/1.1 var(--font-display);
+        letter-spacing: 0.06em;
+        text-transform: uppercase;
+        max-width: 11em;
+      }
+      .compra-card {
+        background: var(--papel);
+        border-top: 6px solid var(--floresta);
+        box-shadow: 0 34px 60px -34px rgba(50, 59, 40, 0.45);
         padding: 24px 20px 26px;
         display: flex;
         flex-direction: column;
@@ -724,21 +905,50 @@
         align-items: flex-start;
         min-width: 0;
       }
-      .oferta-txt h3 {
-        font-size: clamp(26px, 7vw, 38px);
-        line-height: 1;
+      .compra-topo {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: center;
+        justify-content: space-between;
+        gap: 10px 16px;
+        width: 100%;
+      }
+      .compra-card h3 {
+        font: 400 15px/1.1 var(--font-display);
+        letter-spacing: 0.06em;
         text-transform: uppercase;
         color: var(--floresta);
-        letter-spacing: -0.02em;
       }
-      .oferta-txt ul {
-        margin: 0;
-        padding-left: 1.1em;
+      .compra-card .btn {
+        width: 100%;
       }
-      .oferta-txt li {
-        margin-bottom: 4px;
+      .inclui {
+        list-style: none;
+        margin: 4px 0 0;
+        padding: 18px 0 0;
+        border-top: 1px solid var(--salvia-clara);
+        display: grid;
+        gap: 9px;
+        width: 100%;
       }
-      .oferta-txt li.brinde {
+      .inclui li {
+        position: relative;
+        padding-left: 26px;
+        font-size: 16px;
+        line-height: 1.35;
+      }
+      .inclui li::before {
+        content: '';
+        position: absolute;
+        left: 2px;
+        top: 0.3em;
+        width: 12px;
+        height: 6px;
+        border-left: 2px solid var(--floresta);
+        border-bottom: 2px solid var(--floresta);
+        transform: rotate(-45deg);
+      }
+      .inclui li.brinde {
         font-weight: 700;
         color: var(--floresta);
       }
@@ -750,102 +960,242 @@
         font-variant-numeric: tabular-nums;
       }
 
-      /* Lotes: empilhados no celular, lado a lado a partir de 600px */
+      /* Lotes: linha do tempo com um ponto por lote; o atual pulsa */
+      .lotes-bloco {
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        min-width: 0;
+      }
+      .lotes-bloco:has(> .lotes[hidden]) {
+        display: none;
+      }
       .lotes {
         list-style: none;
         margin: 0;
         padding: 0;
         width: 100%;
         display: grid;
-        grid-template-columns: minmax(0, 1fr);
-        gap: 10px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
       }
       .lote {
-        display: grid;
-        grid-template-columns: minmax(0, 1fr) auto;
-        gap: 2px 12px;
-        align-items: baseline;
-        padding: 16px 18px;
-        border: 1px solid var(--floresta);
-        background: var(--papel);
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 5px;
+        padding: 20px 10px 0 0;
+        border-top: 3px solid var(--salvia-clara);
         color: var(--floresta);
+        min-width: 0;
+      }
+      .lote::before {
+        content: '';
+        position: absolute;
+        top: -10px;
+        left: 0;
+        width: 17px;
+        height: 17px;
+        border-radius: 50%;
+        background: var(--areia);
+        border: 3px solid var(--salvia-clara);
+        box-sizing: border-box;
       }
       .lote-nome {
-        font: 400 13px/1 var(--font-display);
+        font: 400 12px/1 var(--font-display);
         letter-spacing: 0.08em;
         text-transform: uppercase;
       }
       .lote-estado {
-        font: 400 11px/1 var(--font-display);
+        order: 4;
+        font: 400 10px/1.2 var(--font-display);
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        text-align: right;
       }
       .lote-preco {
-        grid-column: 1 / -1;
-        font: 400 34px/1 var(--font-display);
+        font: 400 clamp(20px, 5.4vw, 30px)/1 var(--font-display);
         letter-spacing: -0.02em;
         font-variant-numeric: tabular-nums;
-        margin-top: 8px;
+        margin-top: 4px;
+        white-space: nowrap;
       }
       .lote-ate {
-        grid-column: 1 / -1;
-        font-size: 14px;
+        font-size: 13px;
         line-height: 1.3;
-        color: var(--preto);
-      }
-      /* lote em venda: bloco floresta, vem primeiro no celular */
-      .lote.atual {
-        order: -1;
-        background: var(--floresta);
-        color: var(--creme);
-        border-color: var(--floresta);
-      }
-      .lote.atual .lote-preco {
-        font-size: 44px;
-      }
-      .lote.atual .lote-ate {
-        color: var(--salvia-clara);
-      }
-      .lote.atual .lote-estado {
-        background: var(--creme);
-        color: var(--floresta);
-        padding: 6px 8px;
-      }
-      /* lote encerrado: apagado e riscado (o texto "Encerrado" diz o mesmo sem depender da cor) */
-      .lote.encerrado {
-        background: transparent;
-        border-style: dashed;
         color: #4c4f44;
+      }
+      .lote.encerrado {
+        border-top-color: var(--salvia);
+        color: #4c4f44;
+      }
+      .lote.encerrado::before {
+        background: var(--salvia);
+        border-color: var(--salvia);
       }
       .lote.encerrado .lote-preco {
         text-decoration: line-through;
       }
-      .lote.encerrado .lote-ate {
-        color: #4c4f44;
+      .lote.atual {
+        border-top-color: var(--floresta);
+      }
+      .lote.atual::before {
+        background: var(--floresta);
+        border-color: var(--floresta);
+        animation: pulso 2.2s ease-out infinite;
+      }
+      .lote.atual .lote-preco {
+        font-size: clamp(24px, 6.4vw, 34px);
+      }
+      .lote.atual .lote-estado {
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 5px 7px;
+      }
+      @keyframes pulso {
+        0% {
+          box-shadow: 0 0 0 0 rgba(50, 59, 40, 0.45);
+        }
+        70%,
+        100% {
+          box-shadow: 0 0 0 12px rgba(50, 59, 40, 0);
+        }
       }
       .lote-etiqueta {
         background: var(--floresta);
         color: var(--creme);
         padding: 7px 10px;
       }
-      @media (min-width: 600px) {
-        .lotes {
-          grid-template-columns: none;
-          grid-auto-flow: column;
-          grid-auto-columns: minmax(0, 1fr);
-          gap: 14px;
-          align-items: stretch;
-        }
-        .lote {
-          padding: 20px 22px 22px;
-          align-content: start;
-        }
-        .lote.atual {
-          order: 0;
-        }
+      /* Oferta para igrejas: preço por exemplar na compra em volume, com ênfase na quantidade mínima */
+      .igreja {
+        width: 100%;
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 22px 24px;
+        display: grid;
+        grid-template-columns: minmax(0, 1fr) auto;
+        gap: 10px 18px;
+        align-items: center;
       }
-
+      .igreja-titulo {
+        grid-column: 1 / -1;
+        font: 400 13px/1 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+      }
+      .igreja-chamada {
+        margin: 0;
+        font: 400 23px/1.15 var(--font-display);
+        letter-spacing: -0.01em;
+      }
+      .igreja-destaque {
+        display: inline-block;
+        background: var(--creme);
+        color: var(--floresta);
+        padding: 2px 9px;
+        white-space: nowrap;
+      }
+      .igreja-preco {
+        margin: 0;
+        text-align: right;
+        white-space: nowrap;
+      }
+      .igreja-preco b {
+        display: block;
+        font: 400 40px/1 var(--font-display);
+        letter-spacing: -0.02em;
+        font-variant-numeric: tabular-nums;
+      }
+      .igreja-nota {
+        font-family: var(--font-apoio);
+        font-size: 13px;
+        color: var(--salvia-clara);
+      }
+      /* Frase-manifesto (seção "Para quem é") */
+      .manifesto {
+        margin: 0;
+        max-width: 14em;
+        font: 400 clamp(30px, 6.4vw, 58px) / 1.06 var(--font-display);
+        letter-spacing: -0.02em;
+        color: var(--floresta);
+      }
+      .manifesto em {
+        font-family: var(--font-editorial);
+        font-style: italic;
+      }
+      /* Brinde exclusivo para os primeiros compradores */
+      .brinde-ex-num {
+        display: inline-block;
+        font-weight: 400;
+        background: var(--floresta);
+        color: var(--creme);
+        padding: 0 0.22em;
+        line-height: 1.04;
+        white-space: nowrap;
+      }
+      .brinde-ex .foto-bloco {
+        --bloco: var(--floresta);
+      }
+      .brinde-foto {
+        position: relative;
+        width: 100%;
+        aspect-ratio: 4 / 5;
+        background: var(--creme);
+        overflow: hidden;
+      }
+      /* selo redondo sobre a foto do brinde */
+      .selo-brinde {
+        position: absolute;
+        z-index: 2;
+        top: -18px;
+        right: -2px;
+        width: 112px;
+        height: 112px;
+        border-radius: 50%;
+        background: var(--creme);
+        color: var(--floresta);
+        border: 1px solid var(--floresta);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        gap: 2px;
+        text-align: center;
+        font: 400 10px/1.15 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        transform: rotate(-8deg);
+      }
+      .selo-brinde b {
+        font: 400 34px/1 var(--font-display);
+        letter-spacing: -0.02em;
+      }
+      .brinde-img {
+        position: absolute;
+        inset: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+      }
+      .brinde-foto-vazio {
+        position: absolute;
+        inset: 0;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 16px;
+        text-align: center;
+        color: var(--floresta);
+      }
+      .brinde-foto-vazio .nota {
+        font: 400 11px/1.2 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        border: 1px dashed var(--floresta);
+        padding: 7px 10px;
+      }
+      .brinde-ex-nota {
+        color: #4c4f44;
+      }
       /* Avise-me: campo e botão empilhados */
       .aviseme form {
         display: grid;
@@ -907,7 +1257,8 @@
         list-style: none;
         padding: 16px 44px 16px 0;
         position: relative;
-        font: 400 18px/1.2 var(--font-display);
+        font: 500 16px/1.35 var(--font-sans);
+        letter-spacing: -0.01em;
         color: var(--floresta);
         min-height: 54px;
       }
@@ -939,12 +1290,12 @@
       }
       .fecho blockquote {
         margin: 0;
-        max-width: 16em;
+        max-width: 20em;
         font-family: var(--font-editorial);
         font-style: italic;
         font-weight: 300;
-        font-size: clamp(26px, 7.4vw, 48px);
-        line-height: 1.08;
+        font-size: clamp(20px, 4.2vw, 30px);
+        line-height: 1.28;
       }
       .fecho cite {
         font: 300 17px var(--font-editorial);
@@ -979,7 +1330,8 @@
         z-index: 30;
         background: var(--floresta);
         color: var(--creme);
-        padding: 10px var(--gutter) calc(10px + env(safe-area-inset-bottom, 0px));
+        padding: 10px var(--gutter)
+          calc(10px + env(safe-area-inset-bottom, 0px));
         gap: 14px;
         align-items: center;
         justify-content: space-between;
@@ -1046,11 +1398,17 @@
           font-size: 19px;
           padding-inline: 36px;
         }
-        .oferta-txt .btn {
-          width: 100%;
+        .hero-foto {
+          aspect-ratio: 16 / 11;
         }
-        .hero-img {
-          max-width: 360px;
+        .foto-bloco {
+          padding: 0 22px 22px 0;
+        }
+        .foto-bloco::before {
+          inset: 22px 0 0 22px;
+        }
+        .oferta-copo img {
+          width: 84px;
         }
         .hero .sub {
           font-size: 26px;
@@ -1109,7 +1467,7 @@
           grid-template-columns: repeat(2, minmax(0, 1fr));
         }
         .faq summary {
-          font-size: 20px;
+          font-size: 17px;
           padding-block: 18px;
         }
         footer .in {
@@ -1151,18 +1509,55 @@
         .cookies {
           bottom: 16px;
         }
-        .hero .in {
-          grid-template-columns: minmax(0, 1.05fr) minmax(0, 1fr);
-          gap: clamp(24px, 4vw, 56px);
-          align-items: center;
-          padding-block: clamp(28px, 5vw, 56px);
+        /* foto na metade direita, de ponta a ponta; o texto alinha com a coluna do site */
+        .hero {
+          grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+          min-height: min(calc(100svh - 60px), 860px);
         }
-        .hero-img {
+        .hero .in {
           order: 0;
           max-width: none;
+          margin: 0;
+          display: flex;
+          align-items: center;
+          padding-block: clamp(40px, 6vw, 80px);
+          padding-left: max(
+            var(--gutter),
+            calc((100vw - 1120px) / 2 + var(--gutter))
+          );
+          padding-right: clamp(28px, 4.5vw, 72px);
+        }
+        .hero-foto {
+          aspect-ratio: auto;
+          height: 100%;
+        }
+        .hero-foto img {
+          position: absolute;
+          inset: 0;
+          object-position: 50% 40%;
+        }
+        .hero-selo {
+          left: 28px;
+          bottom: 28px;
         }
         .hero-txt {
           gap: 20px;
+        }
+        .foto-bloco {
+          max-width: none;
+        }
+        /* no brinde a foto fica à direita, alternando com "O que você recebe" */
+        .brinde-ex .foto-bloco {
+          order: 2;
+        }
+        .selo-brinde {
+          width: 132px;
+          height: 132px;
+          top: -26px;
+          right: -14px;
+        }
+        .selo-brinde b {
+          font-size: 42px;
         }
         .hero .sub {
           font-size: 28px;
@@ -1227,18 +1622,27 @@
           font-size: clamp(24px, 2.6vw, 30px);
           padding-left: 18px;
         }
-        .oferta-card {
-          grid-template-columns: minmax(0, 1fr) minmax(0, 1.05fr);
+        .oferta {
+          grid-template-columns: minmax(0, 0.95fr) minmax(0, 1fr);
+          gap: 32px clamp(36px, 5vw, 76px);
+          align-items: start;
         }
-        .oferta-card > img {
-          aspect-ratio: auto;
-          min-height: 280px;
+        .oferta > * {
+          grid-column: 2;
         }
-        .oferta-txt {
-          padding: clamp(28px, 4vw, 48px);
+        /* a foto acompanha a rolagem enquanto a coluna da compra passa */
+        .oferta > .oferta-foto {
+          grid-column: 1;
+          grid-row: 1 / span 4;
+          position: sticky;
+          top: 92px;
+          aspect-ratio: 4 / 5;
         }
-        .oferta-txt h3 {
-          font-size: clamp(30px, 3.4vw, 38px);
+        .compra-card {
+          padding: 34px 38px 36px;
+        }
+        .lote {
+          padding-right: 18px;
         }
         .preco .por {
           font-size: clamp(48px, 6vw, 62px);
@@ -1247,7 +1651,7 @@
           grid-template-columns: repeat(3, minmax(0, 1fr));
         }
         .fecho blockquote {
-          font-size: clamp(36px, 4.6vw, 48px);
+          font-size: clamp(24px, 2.8vw, 32px);
         }
       }
 
@@ -1312,6 +1716,15 @@
         .btn:active {
           transform: none;
         }
+        .zoom img {
+          transition: none;
+        }
+        .lote.atual::before {
+          animation: none;
+        }
+        .zoom:hover img {
+          transform: none;
+        }
       }
     </style>
   </head>
@@ -1321,12 +1734,12 @@
     <script>
       window.PREVENDA = {
         // Venda (obrigatórios para publicar)
-        linkCheckout: '', // página de pagamento. Ex.: "https://..."
+        linkCheckout: 'https://app.iecg.com.br/eventos/37bc4149-aab9-4e90-afd9-f88f248f8504', // página de pagamento. Ex.: "https://..."
         precoPor: '', // preço da pré-venda. Ex.: "R$ 69,90"
-        envio: '', // Ex.: "Envio a partir de 10 de dezembro de 2026"
+        envio: 'A retirada será a partir de 12 de dezembro de 2026', // Ex.: "Envio a partir de 10 de dezembro de 2026"
 
         // Venda (opcionais)
-        precoDe: '', // preço cheio. Ex.: "R$ 89,90"
+        precoDe: 'R$ 89,90', // preço cheio. Ex.: "R$ 89,90"
         parcelas: '', // Ex.: "ou 3x de R$ 23,30 sem juros"
         brinde: '', // Ex.: "Marcador de página exclusivo da pré-venda"
         fimPrevenda: '', // data e hora em que a pré-venda acaba, para a contagem. Ex.: "2026-11-30T23:59:00-03:00"
@@ -1338,18 +1751,57 @@
         //   nome:     como aparece na página
         //   preco:    Ex.: "R$ 59,90"
         //   parcelas: opcional. Ex.: "ou 3x de R$ 19,97"
-        //   fim:      data e hora em que o lote acaba. Ex.: "2026-10-31T23:59:00-03:00". A página troca de lote sozinha.
+        //   fim:      último dia do lote. Ex.: "2026-10-30" = vale até o fim do dia 30/10 e vira à meia-noite (no fuso abaixo).
+        //             Também aceita data e hora exatas. Ex.: "2026-10-30T18:00:00-03:00".
+        //             A página troca de lote sozinha na hora certa, mesmo se estiver aberta.
         //   link:     página de pagamento deste lote. Vazio = usa linkCheckout.
         //   esgotado: true encerra o lote antes da data (para lote por quantidade).
         lotes: [
-          { nome: '1º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false },
-          { nome: '2º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false },
-          { nome: '3º lote', preco: '', parcelas: '', fim: '', link: '', esgotado: false }
+          {
+            nome: '1º lote',
+            preco: 'R$ 59,90',
+            parcelas: '',
+            fim: '2026-10-30',
+            link: '',
+            esgotado: false
+          },
+          {
+            nome: '2º lote',
+            preco: 'R$ 69,90',
+            parcelas: '',
+            fim: '2026-11-30',
+            link: '',
+            esgotado: false
+          },
+          {
+            nome: '3º lote',
+            preco: 'R$ 79,90',
+            parcelas: '',
+            fim: '',
+            link: '',
+            esgotado: false
+          }
         ],
         loteAtual: 0, // 0 = a página decide pelas datas. 1, 2, 3… força esse lote (troca manual).
+        fuso: '-03:00', // fuso das datas sem hora (meia-noite da virada). "-03:00" = Brasília; "-04:00" = Mato Grosso do Sul.
+
+        // Preço especial para igrejas na compra em volume. preco vazio = o bloco não aparece.
+        igreja: { preco: 'R$ 49,90', minimo: 10 }, // preco: valor por exemplar. Ex.: "R$ 49,90". minimo: quantidade mínima de exemplares.
+
+        // Brinde para os primeiros compradores. quantidade 0 (ou vazio) = o bloco não aparece.
+        brindeExclusivo: {
+          quantidade: 150,
+          item: 'um copo de café personalizado “Não Temas”',
+          foto: 'img/mockups/brinde-1600.webp' // caminho da imagem do devocional com o copo (proporção 4:5), ex. "img/brinde-copo.jpg". Vazio = mostra um espaço tracejado.
+        }, // quantidade: nº de pedidos que ganham; item: o que ganham.
 
         // Conteúdo (opcionais)
-        autor: { foto: '', frase: '', bio: '' }, // foto: caminho da imagem 4:5, ex. "img/autor.jpg"; frase: uma citação curta; bio: texto, com linha em branco entre parágrafos
+        autor: {
+          foto: 'img/autor.png',
+          frase:
+            'O medo sempre tentará falar primeiro, mas a Palavra de Deus sempre terá a última palavra sobre a sua vida.',
+          bio: 'Pastor desde 1992, ungido e legitimado para o ministério apostólico em 2006. Líder da Igreja Evangélica Comunidade Global, uma igreja influente e em constante crescimento.\n\nCom visão apostólica, a Comunidade Global vive a essência da Igreja primitiva, reunindo-se no templo e nas casas, por meio das células, para fortalecer a fé, transformar vidas e expandir o Reino de Deus.'
+        }, // foto: caminho da imagem 4:5, ex. "img/autor.png"; frase: uma citação curta; bio: texto, com linha em branco entre parágrafos
         depoimentos: [], // só depoimentos reais. Ex.: [{ texto: "…", nome: "Maria, Recife" }]
         atendimento: '', // Ex.: "WhatsApp (00) 00000-0000"
 
@@ -1368,16 +1820,13 @@
       <div class="in">
         <a class="marca" href="#topo">365 Vezes <span>Não Temas!</span></a>
         <nav class="menu" aria-label="Seções da página">
-          <a href="#medo">Por que este livro</a>
-          <a href="#recebe">O livro</a>
-          <a href="#paraquem">Para quem é</a>
+          <a href="#recebe">O devocional</a>
           <a href="#autor">O autor</a>
           <a href="#oferta">Pré-venda</a>
           <a href="#duvidas">Dúvidas</a>
         </nav>
         <div class="lado">
-          <span class="contagem" data-contagem hidden></span>
-          <a class="btn claro" data-cta="barra" href="#oferta"
+          <a class="btn claro" data-cta="menu-topo" href="#oferta"
             >Garantir o meu</a
           >
         </div>
@@ -1398,134 +1847,175 @@
             </p>
             <div class="compra">
               <span class="olho lote-etiqueta" data-lote-nome hidden></span>
-              <a class="btn grande" data-cta="hero" href="#oferta"
+              <a class="btn grande" data-cta="topo-hero" href="#oferta"
                 >Garantir o meu na pré-venda</a
               >
             </div>
+            <dl class="hero-fatos">
+              <div><dt>365</dt><dd>mensagens</dd></div>
+              <div><dt>12</dt><dd>aberturas de mês</dd></div>
+              <div><dt>2027</dt><dd>um ano inteiro</dd></div>
+            </dl>
           </div>
+        </div>
+        <figure class="hero-foto">
           <img
-            class="hero-img"
-            src="img/livro-areia.jpg"
-            alt="Capa do livro 365 Vezes Não Temas!, verde-sálvia, com o numeral 365 formado pela frase Não Temas"
+            src="img/mockups/hero-1600.webp"
+            srcset="
+              img/mockups/hero-800.webp   800w,
+              img/mockups/hero-1600.webp 1600w
+            "
+            sizes="(min-width: 900px) 50vw, 100vw"
+            alt="O devocional 365 Vezes Não Temas! em pé numa estante de madeira, ao lado de exemplares com a lombada verde"
             width="1600"
-            height="1368"
+            height="2000"
             fetchpriority="high"
           />
+          <span class="olho hero-selo">Edição 2027 · Editora Essência 4:18</span>
+        </figure>
+      </section>
+
+      <section class="faixa floresta fecho">
+        <svg
+          width="0"
+          height="0"
+          style="position: absolute"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <defs>
+            <pattern
+              id="pad-medo"
+              width="160"
+              height="27.6"
+              patternUnits="userSpaceOnUse"
+              class="pad2"
+            >
+              <text x="0" y="7">
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w3">“Não Temas”</tspan>
+                <tspan class="w4">Não Temas”</tspan>
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w1">“Não Temas”</tspan>
+              </text>
+              <text x="-42" y="16.2">
+                <tspan class="w4">Não Temas”</tspan>
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w3">“Não Temas”</tspan>
+                <tspan class="w4">Não Temas”</tspan>
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w1">“Não Temas”</tspan>
+              </text>
+              <text x="-88" y="25.4">
+                <tspan class="w3">“Não Temas”</tspan>
+                <tspan class="w4">Não Temas”</tspan>
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w1">“Não Temas”</tspan>
+                <tspan class="w4">Não Temas”</tspan>
+                <tspan class="w9">Não Temas”</tspan>
+                <tspan class="w3">“Não Temas”</tspan>
+              </text>
+            </pattern>
+          </defs>
+        </svg>
+        <div class="in texto centro" style="gap: 26px">
+          <svg
+            class="fecho-palavra"
+            viewBox="0 -26 800 138"
+            role="img"
+            aria-label="Não temas"
+          >
+            <text
+              class="medo-palavra medo-base"
+              x="400"
+              y="104"
+              text-anchor="middle"
+            >
+              NÃO TEMAS
+            </text>
+            <text
+              class="medo-palavra"
+              x="400"
+              y="104"
+              text-anchor="middle"
+              fill="url(#pad-medo)"
+            >
+              NÃO TEMAS
+            </text>
+          </svg>
+          <blockquote>
+            “Em me vindo o temor, hei de confiar em ti. Em Deus, cuja palavra eu
+            exalto, neste Deus ponho a minha confiança e nada temerei. Que me
+            pode fazer um mortal?”
+          </blockquote>
+          <cite>Salmo 56:3-4</cite>
+          <a class="btn claro grande" data-cta="versiculo-topo" href="#oferta"
+            >Garantir o meu na pré-venda</a
+          >
         </div>
       </section>
 
-      <section class="faixa floresta" id="medo">
-        <div class="in texto" style="gap: 36px">
+      <section class="faixa areia brinde-ex" data-brinde-bloco hidden>
+        <div class="in duas">
+          <div class="foto-bloco revela">
+            <span class="selo-brinde" aria-hidden="true"
+              >Para os<b data-brinde-qtd>150</b>primeiros</span
+            >
+            <div class="brinde-foto zoom">
+              <div class="brinde-foto-vazio" data-brinde-vazio>
+                <span class="nota">Foto do devocional com o copo · 4:5</span>
+              </div>
+              <img
+                class="brinde-img"
+                data-brinde-foto
+                alt="O devocional 365 Vezes Não Temas! ao lado do copo de café personalizado, num criado-mudo"
+                loading="lazy"
+                hidden
+              />
+            </div>
+          </div>
           <div class="texto">
-            <span class="olho">Por que este livro</span>
-            <h2>O medo muda de nome o ano inteiro</h2>
-            <p>
-              Repare nas palavras abaixo: cada medo está escrito com a resposta
-              que a Bíblia dá a ele.
+            <h2>
+              Os primeiros
+              <span class="brinde-ex-num" data-brinde-qtd>150</span>
+              ganham um presente
+            </h2>
+            <p data-brinde-texto>
+              Garanta o seu entre os primeiros pedidos e receba, junto com o
+              devocional, um copo de café personalizado com a frase que guia o
+              devocional inteiro.
+            </p>
+            <a class="btn" data-cta="brinde-copo" href="#oferta"
+              >Quero o meu com o copo</a
+            >
+            <p class="micro brinde-ex-nota">
+              Oferta válida enquanto durarem as unidades do brinde.
             </p>
           </div>
-          <svg
-            width="0"
-            height="0"
-            style="position: absolute"
-            aria-hidden="true"
-            focusable="false"
-          >
-            <defs>
-              <pattern
-                id="pad-medo"
-                width="160"
-                height="27.6"
-                patternUnits="userSpaceOnUse"
-                class="pad2"
-              >
-                <text x="0" y="7">
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w3">“Não Temas”</tspan>
-                  <tspan class="w4">Não Temas”</tspan>
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w1">“Não Temas”</tspan>
-                </text>
-                <text x="-42" y="16.2">
-                  <tspan class="w4">Não Temas”</tspan>
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w3">“Não Temas”</tspan>
-                  <tspan class="w4">Não Temas”</tspan>
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w1">“Não Temas”</tspan>
-                </text>
-                <text x="-88" y="25.4">
-                  <tspan class="w3">“Não Temas”</tspan>
-                  <tspan class="w4">Não Temas”</tspan>
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w1">“Não Temas”</tspan>
-                  <tspan class="w4">Não Temas”</tspan>
-                  <tspan class="w9">Não Temas”</tspan>
-                  <tspan class="w3">“Não Temas”</tspan>
-                </text>
-              </pattern>
-            </defs>
-          </svg>
-          <ul class="medos">
-            <li>
-              <svg viewBox="0 0 520 112" role="img" aria-label="O futuro">
-                <text class="medo-palavra medo-base" x="0" y="104">FUTURO</text>
-                <text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">
-                  FUTURO
-                </text>
-              </svg>
-              <p>
-                A decisão que não pode esperar e a resposta que
-                ainda não veio.
-              </p>
-            </li>
-            <li>
-              <svg viewBox="0 0 520 112" role="img" aria-label="A falta">
-                <text class="medo-palavra medo-base" x="0" y="104">FALTA</text>
-                <text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">
-                  FALTA
-                </text>
-              </svg>
-              <p>
-                A conta que não fecha, o emprego que balança, a
-                porta que não abre.
-              </p>
-            </li>
-            <li>
-              <svg viewBox="0 0 520 112" role="img" aria-label="A perda">
-                <text class="medo-palavra medo-base" x="0" y="104">PERDA</text>
-                <text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">
-                  PERDA
-                </text>
-              </svg>
-              <p>
-                O diagnóstico, a notícia, a ausência de quem
-                estava sempre ali.
-              </p>
-            </li>
-          </ul>
-          <p class="resposta">
-            Para cada um desses dias, a Bíblia repete a mesma coisa. Este livro
-            coloca essa palavra na sua mão, um dia de cada vez.
-          </p>
-          <a class="btn claro" data-cta="medo" href="#oferta"
-            >Quero começar 2027 assim</a
-          >
         </div>
       </section>
 
       <section class="faixa" id="recebe">
         <div class="in duas">
-          <img
-            src="img/livro-floresta.jpg"
-            alt="O livro 365 Vezes Não Temas! em pé, ao lado de três exemplares empilhados"
-            width="1600"
-            height="889"
-            loading="lazy"
-          />
+          <figure class="foto-bloco revela">
+            <div class="moldura zoom">
+              <img
+                src="img/mockups/recebe-1600.webp"
+                srcset="
+                  img/mockups/recebe-800.webp   800w,
+                  img/mockups/recebe-1600.webp 1600w
+                "
+                sizes="(min-width: 900px) 46vw, 92vw"
+                alt="O devocional 365 Vezes Não Temas! visto de cima, sobre uma mesa de madeira com caderno, caneta e óculos"
+                width="1600"
+                height="2000"
+                loading="lazy"
+              />
+            </div>
+          </figure>
           <div class="texto">
             <span class="olho">O que você recebe</span>
-            <h2>Um livro para abrir todos os dias</h2>
+            <h2>Um devocional para abrir todos os dias</h2>
             <p>
               São 365 mensagens, uma para cada dia de 2027. Cada página traz um
               texto curto a partir da Bíblia, uma frase para levar com você, um
@@ -1537,28 +2027,20 @@
               <li>Espaço para anotar em todas as páginas</li>
               <li>Uma abertura especial a cada mês</li>
             </ul>
-            <a class="btn" data-cta="recebe" href="#oferta">Garantir o meu</a>
           </div>
         </div>
       </section>
 
       <section class="faixa salvia" id="paraquem">
-        <div class="in paraquem-grade">
-          <div class="texto">
-            <span class="olho">Para quem é</span>
-            <h2>Este livro é para você se…</h2>
-          </div>
-          <ul class="paraquem">
-            <li><svg viewBox="0 -26 560 138" role="img" aria-label="Bíblia"><text class="medo-palavra base-salvia" x="0" y="104">BÍBLIA</text><text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">BÍBLIA</text></svg><p>quer começar o dia com ela e não sabe por onde.</p></li>
-            <li><svg viewBox="0 -26 560 138" role="img" aria-label="Ansioso"><text class="medo-palavra base-salvia" x="0" y="104">ANSIOSO</text><text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">ANSIOSO</text></svg><p>vive preocupado com o que ainda nem aconteceu.</p></li>
-            <li><svg viewBox="0 -26 560 138" role="img" aria-label="Luta"><text class="medo-palavra base-salvia" x="0" y="104">LUTA</text><text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">LUTA</text></svg><p>atravessa uma fase difícil e precisa de uma palavra por dia.</p></li>
-            <li><svg viewBox="0 -26 560 138" role="img" aria-label="Parou"><text class="medo-palavra base-salvia" x="0" y="104">PAROU</text><text class="medo-palavra" x="0" y="104" fill="url(#pad-medo)">PAROU</text></svg><p>já começou um devocional e largou no meio do caminho.</p></li>
-          </ul>
-          <div class="presente">
-            <p class="presente-titulo">E para quem você ama</p>
-            <p>Um presente que dura o ano inteiro: 365 dias de alguém lembrando a essa pessoa que ela não precisa ter medo.</p>
-            <a class="btn claro" data-cta="paraquem" href="#oferta">Garantir o meu</a>
-          </div>
+        <div class="in texto centro" style="gap: 30px">
+          <span class="olho">O que este devocional é</span>
+          <p class="manifesto">
+            Este não é um devocional sobre a ausência do medo, mas sobre
+            <em>o que fazer quando ele chega</em>.
+          </p>
+          <a class="btn claro" data-cta="frase-manifesto" href="#oferta"
+            >Quero começar assim</a
+          >
         </div>
       </section>
 
@@ -1583,7 +2065,7 @@
             <span class="olho">Quem escreve</span>
             <h2>Edmilson<br />Oliveira</h2>
             <p class="autor-frase" data-autor-frase>
-              Uma frase do autor sobre o livro, em uma ou duas linhas.
+              Uma frase do autor sobre o devocional, em uma ou duas linhas.
             </p>
             <div class="autor-bio" data-autor-bio>
               <p>
@@ -1595,7 +2077,9 @@
                 para quem ele escreve.
               </p>
             </div>
-            <a class="btn claro" data-cta="autor" href="#oferta">Garantir o meu</a>
+            <a class="btn claro" data-cta="secao-autor" href="#oferta"
+              >Garantir o meu</a
+            >
           </div>
         </div>
       </section>
@@ -1611,51 +2095,86 @@
       </section>
 
       <section class="faixa areia" id="oferta">
-        <div class="in texto" style="gap: 32px">
-          <div class="texto">
+        <div class="in oferta">
+          <div class="oferta-topo">
             <span class="olho">Pré-venda</span>
             <h2>Garanta o seu antes do lançamento</h2>
             <p>
-              Compre agora e receba assim que o livro for lançado, para começar
-              janeiro com ele na mão.
+              Compre agora e receba assim que o devocional for lançado, para
+              começar janeiro com ele na mão.
             </p>
           </div>
-          <ol class="lotes" data-lotes aria-label="Lotes da pré-venda" hidden></ol>
-          <div class="oferta-card">
+          <figure class="oferta-foto zoom">
             <img
-              src="img/livros-grade.jpg"
-              alt="Vários exemplares do livro 365 Vezes Não Temas! lado a lado"
+              src="img/mockups/oferta-1600.webp"
+              srcset="
+                img/mockups/oferta-800.webp   800w,
+                img/mockups/oferta-1600.webp 1600w
+              "
+              sizes="(min-width: 900px) 46vw, 100vw"
+              alt="O devocional 365 Vezes Não Temas! numa mesinha de madeira ao lado de uma poltrona"
               width="1600"
-              height="889"
+              height="2000"
               loading="lazy"
             />
-            <div class="oferta-txt">
-              <h3>365 Vezes Não Temas!</h3>
-              <ul>
-                <li>365 mensagens, uma por dia</li>
-                <li>12 aberturas de mês</li>
-                <li>Espaço para anotações em todas as páginas</li>
-                <li>Leitura bíblica indicada todos os dias</li>
-                <li>Formato 15,3 × 22,6 cm · Editora Essência 4:18</li>
-                <li class="brinde" data-brinde hidden></li>
-              </ul>
-              <span class="olho lote-etiqueta" data-lote-nome hidden></span>
-              <div class="preco">
-                <span class="de" data-preco-de hidden></span>
-                <span class="por" data-preco-por></span>
-                <span class="parc" data-parcelas hidden></span>
-              </div>
-              <p class="prazo" data-contagem hidden></p>
-              <a class="btn grande" data-cta="oferta" href="#oferta"
-                >Garantir o meu na pré-venda</a
+            <div class="oferta-copo" data-brinde-bloco hidden>
+              <span
+                >Brinde para os primeiros
+                <b data-brinde-qtd>150</b></span
               >
-              <p class="micro" data-envio></p>
-              <p class="micro" data-garantia hidden></p>
-              <p class="micro">
-                Você conclui a compra na página de pagamento, onde aparecem as
-                formas de pagamento e o frete para o seu CEP.
-              </p>
+              <img
+                src="img/mockups/copo.webp"
+                alt=""
+                width="696"
+                height="1000"
+                loading="lazy"
+              />
             </div>
+          </figure>
+          <div class="compra-card">
+            <div class="compra-topo">
+              <h3>365 Vezes Não Temas!</h3>
+              <span class="olho lote-etiqueta" data-lote-nome hidden></span>
+            </div>
+            <div class="preco">
+              <span class="de" data-preco-de hidden></span>
+              <span class="por" data-preco-por></span>
+              <span class="parc" data-parcelas hidden></span>
+            </div>
+            <p class="prazo" data-contagem hidden></p>
+            <a class="btn grande" data-cta="card-oferta" href="#oferta"
+              >Garantir o meu na pré-venda</a
+            >
+            <p class="micro" data-envio></p>
+            <p class="micro" data-garantia hidden></p>
+            <ul class="inclui">
+              <li>365 mensagens, uma por dia</li>
+              <li>12 aberturas de mês</li>
+              <li>Espaço para anotações em todas as páginas</li>
+              <li>Leitura bíblica indicada todos os dias</li>
+              <li>Formato 15,3 × 22,6 cm · Editora Essência 4:18</li>
+              <li class="brinde" data-brinde hidden></li>
+            </ul>
+          </div>
+          <div class="lotes-bloco">
+            <span class="olho">O preço sobe a cada lote</span>
+            <ol
+              class="lotes"
+              data-lotes
+              aria-label="Lotes da pré-venda"
+              hidden
+            ></ol>
+          </div>
+          <div class="igreja" data-igreja hidden>
+            <span class="igreja-titulo">Para igrejas</span>
+            <p class="igreja-chamada">
+              <span class="igreja-destaque" data-igreja-min>acima de 10</span>
+              exemplares
+            </p>
+            <p class="igreja-preco">
+              <b data-igreja-preco></b>
+              <span class="igreja-nota">por exemplar</span>
+            </p>
           </div>
         </div>
       </section>
@@ -1701,7 +2220,7 @@
             <details>
               <summary>O que significa pré-venda?</summary>
               <p>
-                Você compra agora e recebe quando o livro for lançado.
+                Você compra agora e recebe quando o devocional for lançado.
                 <span data-faq-envio
                   >A data de envio aparece na página de pagamento.</span
                 >
@@ -1709,12 +2228,13 @@
             </details>
             <details>
               <summary>
-                Como faço o pagamento e qual o prazo de entrega?
+                Como faço o pagamento e como recebo o devocional?
               </summary>
               <p>
                 Ao clicar em “Garantir o meu” você vai para a página de
-                pagamento. Lá aparecem as formas de pagamento, o frete e o prazo
-                para o seu CEP antes de concluir.
+                pagamento, onde aparecem as formas de pagamento antes de
+                concluir. O devocional não é enviado pelos Correios: a retirada é
+                feita no campus que você escolher na compra.
               </p>
             </details>
             <details>
@@ -1737,14 +2257,14 @@
               <summary>Preciso começar no dia 1º de janeiro?</summary>
               <p>
                 Não. As mensagens são independentes. Você pode abrir no dia em
-                que o livro chegar e seguir dali.
+                que o devocional chegar e seguir dali.
               </p>
             </details>
             <details>
               <summary>Serve para presentear?</summary>
               <p>
-                Serve. É um livro para o ano inteiro, e cada mensagem funciona
-                sozinha, mesmo para quem nunca leu um devocional.
+                Serve. É um devocional para o ano inteiro, e cada mensagem
+                funciona sozinha, mesmo para quem nunca leu um devocional.
               </p>
             </details>
             <details data-faq-garantia hidden>
@@ -1755,7 +2275,8 @@
               <summary>Ainda ficou com alguma dúvida?</summary>
               <p>
                 Fale com a gente pelo WhatsApp, no número +55 67 8466-1644.
-                Respondemos sobre o livro, a pré-venda, o pagamento e a entrega.
+                Respondemos sobre o devocional, a pré-venda, o pagamento e a
+                entrega.
               </p>
               <p>
                 <a
@@ -1772,19 +2293,6 @@
         </div>
       </section>
 
-      <section class="faixa floresta fecho">
-        <div class="in texto centro" style="gap: 26px">
-          <svg class="fecho-palavra" viewBox="0 -26 800 138" role="img" aria-label="Não temas"><text class="medo-palavra medo-base" x="400" y="104" text-anchor="middle">NÃO TEMAS</text><text class="medo-palavra" x="400" y="104" text-anchor="middle" fill="url(#pad-medo)">NÃO TEMAS</text></svg>
-          <blockquote>
-            “Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.”
-          </blockquote>
-          <cite>Salmos 119:105 ARC</cite>
-          <a class="btn claro grande" data-cta="fecho" href="#oferta"
-            >Garantir o meu na pré-venda</a
-          >
-          <p class="micro" data-envio></p>
-        </div>
-      </section>
     </main>
 
     <footer>
@@ -1804,7 +2312,7 @@
 
     <div class="fixo-cel" aria-label="Comprar">
       <span class="p" data-preco-por></span>
-      <a class="btn claro" data-cta="fixo" href="#oferta">Garantir o meu</a>
+      <a class="btn claro" data-cta="barra-fixa" href="#oferta">Garantir o meu</a>
     </div>
 
     <div
@@ -1828,26 +2336,63 @@
         const all = (sel, fn) => document.querySelectorAll(sel).forEach(fn)
         const faltando = []
 
-        /* ---------- Lotes: decide o lote em venda e passa preço, parcelas, link e prazo para o resto ---------- */
-        const lotes = Array.isArray(P.lotes) ? P.lotes.filter(l => l && l.nome) : []
-        let prefixoContagem = 'Pré-venda termina em '
-        let recarregarNoFim = false
-        if (lotes.length) {
-          const agora = Date.now()
-          const fimDe = l => {
-            const d = l.fim ? new Date(l.fim) : null
-            return d && !isNaN(d) ? d : null
+        /* ---------- Relógio e datas ---------- */
+        // Hora usada para decidir o lote: a do aparelho, corrigida pela do servidor
+        // quando a página já mediu a diferença (aparelho com relógio errado não vê o lote errado).
+        let ajusteRelogio = 0
+        try {
+          ajusteRelogio = Number(sessionStorage.getItem('naotemas-relogio')) || 0
+        } catch (e) {}
+        const agoraMs = () => Date.now() + ajusteRelogio
+        const fuso = /^[+-]\d{2}:\d{2}$/.test(P.fuso || '') ? P.fuso : '-03:00'
+        const fusoMin =
+          (fuso[0] === '-' ? -1 : 1) *
+          (Number(fuso.slice(1, 3)) * 60 + Number(fuso.slice(4, 6)))
+        // "2026-10-30" = até o fim desse dia, virando à meia-noite no fuso; data com hora vale como está
+        const quando = txt => {
+          if (!txt) return null
+          if (/^\d{4}-\d{2}-\d{2}$/.test(txt)) {
+            const d = new Date(txt + 'T00:00:00' + fuso)
+            return isNaN(d) ? null : new Date(d.getTime() + 864e5)
           }
+          const d = new Date(txt)
+          return isNaN(d) ? null : d
+        }
+        // dia/mês no fuso configurado, igual para todo visitante
+        const dia = d => {
+          const x = new Date(d.getTime() + fusoMin * 6e4)
+          const dois = n => String(n).padStart(2, '0')
+          return dois(x.getUTCDate()) + '/' + dois(x.getUTCMonth() + 1)
+        }
+
+        /* ---------- Lotes: decide o lote em venda e passa preço, parcelas, link e prazo para o resto ---------- */
+        const lotes = Array.isArray(P.lotes)
+          ? P.lotes.filter(l => l && l.nome)
+          : []
+        let prefixoContagem = 'Pré-venda termina em '
+        // com lote escolhido à mão, a página nunca troca sozinha
+        const loteManual = P.loteAtual >= 1 && P.loteAtual <= lotes.length
+        let proximaVirada = null
+        if (lotes.length) {
+          const agora = agoraMs()
+          const fimDe = l => quando(l.fim)
           const acabou = l => !!l.esgotado || (fimDe(l) && fimDe(l) <= agora)
           let iAtual = -1
-          if (P.loteAtual >= 1 && P.loteAtual <= lotes.length) iAtual = P.loteAtual - 1
+          if (loteManual) iAtual = P.loteAtual - 1
           else iAtual = lotes.findIndex(l => !acabou(l))
           const atual = iAtual >= 0 ? lotes[iAtual] : null
 
-          const dia = d => d.toLocaleDateString('pt-BR', { day: '2-digit', month: '2-digit' })
+          // "até" mostra o último dia do lote; o lote seguinte começa no instante em que ele acaba
+          const ultimoDia = d => dia(new Date(d.getTime() - 1))
+          const diaApos = d => dia(new Date(d.getTime() + 6e4))
           const lista = document.querySelector('[data-lotes]')
           lotes.forEach((l, i) => {
-            const estado = i === iAtual ? 'atual' : iAtual < 0 || i < iAtual || acabou(l) ? 'encerrado' : 'breve'
+            const estado =
+              i === iAtual
+                ? 'atual'
+                : iAtual < 0 || i < iAtual || acabou(l)
+                  ? 'encerrado'
+                  : 'breve'
             const li = document.createElement('li')
             li.className = 'lote ' + estado
             if (estado === 'atual') li.setAttribute('aria-current', 'true')
@@ -1856,7 +2401,11 @@
             nome.textContent = l.nome
             const est = document.createElement('span')
             est.className = 'lote-estado'
-            est.textContent = { atual: 'Disponível agora', encerrado: l.esgotado ? 'Esgotado' : 'Encerrado', breve: 'Em breve' }[estado]
+            est.textContent = {
+              atual: 'Disponível agora',
+              encerrado: l.esgotado ? 'Esgotado' : 'Encerrado',
+              breve: 'Em breve'
+            }[estado]
             const preco = document.createElement('span')
             preco.className = 'lote-preco'
             preco.textContent = l.preco || 'R$ —'
@@ -1866,10 +2415,15 @@
             const f = fimDe(l)
             const ant = i > 0 ? fimDe(lotes[i - 1]) : null
             ate.textContent =
-              estado === 'breve' && ant ? 'a partir de ' + dia(ant) + (f ? ', até ' + dia(f) : '')
-              : f ? 'até ' + dia(f)
-              : i === lotes.length - 1 ? 'até o lançamento' : 'data a definir'
-            if (l.parcelas && estado === 'atual') ate.textContent += ' · ' + l.parcelas
+              estado === 'breve' && ant
+                ? 'a partir de ' + diaApos(ant) + (f ? ', até ' + ultimoDia(f) : '')
+                : f
+                  ? 'até ' + ultimoDia(f)
+                  : i === lotes.length - 1
+                    ? 'até o lançamento'
+                    : 'data a definir'
+            if (l.parcelas && estado === 'atual')
+              ate.textContent += ' · ' + l.parcelas
             li.append(nome, est, preco, ate)
             lista.append(li)
           })
@@ -1879,9 +2433,10 @@
             P.precoPor = atual.preco || ''
             P.parcelas = atual.parcelas || ''
             if (atual.link) P.linkCheckout = atual.link
-            P.fimPrevenda = atual.fim || ''
+            const fimAtual = fimDe(atual)
+            P.fimPrevenda = fimAtual ? fimAtual.toISOString() : ''
             prefixoContagem = atual.nome + ' termina em '
-            recarregarNoFim = iAtual < lotes.length - 1
+            if (!loteManual) proximaVirada = fimAtual
             // o lote seguinte, mais caro, serve de "preço de" quando não há precoDe
             const prox = lotes[iAtual + 1]
             if (!P.precoDe && prox && prox.preco) P.precoDe = prox.preco
@@ -1898,6 +2453,50 @@
               e.hidden = false
             })
           }
+        }
+
+        /* ---------- Oferta para igrejas: preço por exemplar na compra em volume ---------- */
+        const igreja = P.igreja || {}
+        if (igreja.preco) {
+          const minimo = igreja.minimo || 10
+          all('[data-igreja-min]', e => {
+            e.textContent = 'acima de ' + minimo
+          })
+          all('[data-igreja-preco]', e => {
+            e.textContent = igreja.preco
+          })
+          all('[data-igreja]', e => {
+            e.hidden = false
+          })
+        }
+
+        /* ---------- Brinde para os primeiros compradores ---------- */
+        const brindeEx = P.brindeExclusivo || {}
+        if (brindeEx.quantidade) {
+          all('[data-brinde-qtd]', e => {
+            e.textContent = brindeEx.quantidade
+          })
+          if (brindeEx.item)
+            all('[data-brinde-texto]', e => {
+              e.textContent =
+                'Garanta o seu entre os primeiros ' +
+                brindeEx.quantidade +
+                ' pedidos e receba, junto com o devocional, ' +
+                brindeEx.item +
+                '.'
+            })
+          if (brindeEx.foto) {
+            all('[data-brinde-foto]', e => {
+              e.src = brindeEx.foto
+              e.hidden = false
+            })
+            all('[data-brinde-vazio]', e => {
+              e.hidden = true
+            })
+          }
+          all('[data-brinde-bloco]', e => {
+            e.hidden = false
+          })
         }
 
         /* ---------- Medição: tudo passa por evento(); só sai daqui se a pessoa aceitar ---------- */
@@ -2059,16 +2658,13 @@
           })
 
         /* ---------- Contagem regressiva: só aparece com uma data real em fimPrevenda ---------- */
-        const fim = P.fimPrevenda ? new Date(P.fimPrevenda) : null
-        if (fim && !isNaN(fim)) {
+        const fim = quando(P.fimPrevenda)
+        if (fim) {
           const tick = () => {
-            const ms = fim - Date.now()
+            const ms = fim - agoraMs()
             if (ms <= 0) {
-              // fim de um lote com outro na sequência: recarrega para mostrar o novo preço
-              if (recarregarNoFim) {
-                location.reload()
-                return false
-              }
+              // a troca de lote recarrega a página (veja "Virada de lote" abaixo)
+              if (proximaVirada) return false
               all('[data-contagem]', e => {
                 e.textContent = 'Pré-venda encerrada'
                 e.hidden = false
@@ -2092,6 +2688,56 @@
             return true
           }
           if (tick()) setInterval(tick, 30000)
+        }
+
+        /* ---------- Virada de lote: recarrega a página no instante em que o lote atual acaba ---------- */
+        // Funciona com a página aberta: agenda a troca para a hora exata e confere de novo quando a
+        // aba volta a aparecer (abas em segundo plano e aparelhos que dormiram atrasam os timers).
+        // O HTML é servido sem cache (nginx), então a página recarregada já traz o lote novo.
+        if (proximaVirada) {
+          const conferir = () => {
+            if (agoraMs() >= proximaVirada.getTime()) location.reload()
+          }
+          const agendar = () => {
+            const falta = proximaVirada.getTime() - agoraMs()
+            // timers longos perdem precisão: no máximo 1 h por vez, e 1 s depois da virada
+            setTimeout(
+              () => {
+                conferir()
+                agendar()
+              },
+              Math.min(Math.max(falta + 1000, 1000), 36e5)
+            )
+          }
+          agendar()
+          document.addEventListener('visibilitychange', () => {
+            if (!document.hidden) conferir()
+          })
+          addEventListener('focus', conferir)
+          addEventListener('pageshow', conferir)
+        }
+
+        /* ---------- Relógio do servidor: corrige aparelho com hora errada ---------- */
+        // Lê o cabeçalho Date do próprio site. Se o relógio do aparelho estiver mais de 2 minutos
+        // diferente, guarda a diferença e recarrega uma vez para decidir o lote com a hora certa.
+        if (lotes.length && !loteManual && /^https?:$/.test(location.protocol)) {
+          fetch(location.pathname, { method: 'HEAD', cache: 'no-store' })
+            .then(r => {
+              const servidor = Date.parse(r.headers.get('Date'))
+              if (isNaN(servidor)) return
+              const novo = servidor - Date.now()
+              if (Math.abs(novo - ajusteRelogio) < 12e4) return
+              let jaAjustou = false
+              try {
+                jaAjustou = sessionStorage.getItem('naotemas-relogio-ok') === '1'
+                sessionStorage.setItem('naotemas-relogio', String(novo))
+                sessionStorage.setItem('naotemas-relogio-ok', '1')
+              } catch (e) {
+                return
+              }
+              if (!jaAjustou) location.reload()
+            })
+            .catch(() => {})
         }
 
         /* ---------- Autor e depoimentos: só com conteúdo real ---------- */
@@ -2185,6 +2831,32 @@
           })
         }
 
+        /* ---------- Fotos entram suavemente ao aparecer na tela ---------- */
+        if (
+          'IntersectionObserver' in window &&
+          !matchMedia('(prefers-reduced-motion: reduce)').matches
+        ) {
+          document.documentElement.classList.add('js-revela')
+          const or = new IntersectionObserver(
+            es =>
+              es.forEach(e => {
+                if (!e.isIntersecting) return
+                e.target.classList.add('visivel')
+                or.unobserve(e.target)
+              }),
+            { rootMargin: '0px 0px -8% 0px' }
+          )
+          // em cada faixa (menos a primeira tela), os blocos de conteúdo entram em cascata
+          all('main > section:not(.hero) > .in', box => {
+            ;[...box.children].forEach((el, i) => {
+              if (el.classList.contains('revela')) return
+              el.classList.add('revela')
+              el.style.setProperty('--i', Math.min(i, 5))
+            })
+          })
+          all('.revela', el => or.observe(el))
+        }
+
         /* ---------- Menu: destaca a seção visível ---------- */
         if ('IntersectionObserver' in window) {
           const links = {}
@@ -2221,7 +2893,9 @@
           )
           o.observe(document.getElementById('oferta'))
         }
-        all('[data-whats]', a => a.addEventListener('click', () => evento('clique_whatsapp')))
+        all('[data-whats]', a =>
+          a.addEventListener('click', () => evento('clique_whatsapp'))
+        )
         all('.faq details', d =>
           d.addEventListener('toggle', () => {
             if (d.open)
