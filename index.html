@@ -1791,8 +1791,8 @@
         // Brinde para os primeiros compradores. quantidade 0 (ou vazio) = o bloco não aparece.
         brindeExclusivo: {
           quantidade: 150,
-          item: 'um Café Bucks “Não Temas”',
-          foto: 'img/mockups/brinde-1600.webp' // caminho da imagem do devocional com o Café Bucks (proporção 4:5), ex. "img/brinde-copo.jpg". Vazio = mostra um espaço tracejado.
+          item: 'um Copo Bucks “Não Temas”',
+          foto: 'img/mockups/brinde-1600.webp' // caminho da imagem do devocional com o Copo Bucks (proporção 4:5), ex. "img/brinde-copo.jpg". Vazio = mostra um espaço tracejado.
         }, // quantidade: nº de pedidos que ganham; item: o que ganham.
 
         // Conteúdo (opcionais)
@@ -1963,12 +1963,12 @@
             >
             <div class="brinde-foto zoom">
               <div class="brinde-foto-vazio" data-brinde-vazio>
-                <span class="nota">Foto do devocional com o Café Bucks · 4:5</span>
+                <span class="nota">Foto do devocional com o Copo Bucks · 4:5</span>
               </div>
               <img
                 class="brinde-img"
                 data-brinde-foto
-                alt="O devocional 365 Vezes Não Temas! ao lado do Café Bucks, num criado-mudo"
+                alt="O devocional 365 Vezes Não Temas! ao lado do Copo Bucks, num criado-mudo"
                 loading="lazy"
                 hidden
               />
@@ -1982,11 +1982,11 @@
             </h2>
             <p data-brinde-texto>
               Garanta o seu entre os primeiros pedidos e receba, junto com o
-              devocional, um Café Bucks com a frase que guia o
+              devocional, um Copo Bucks com a frase que guia o
               devocional inteiro.
             </p>
             <a class="btn" data-cta="brinde-copo" href="#oferta"
-              >Quero o meu com o Café Bucks</a
+              >Quero o meu com o Copo Bucks</a
             >
             <p class="micro brinde-ex-nota">
               Oferta válida enquanto durarem as unidades do brinde.
@@ -2166,9 +2166,9 @@
             ></ol>
           </div>
           <div class="igreja" data-igreja hidden>
-            <span class="igreja-titulo">Para igrejas</span>
+            <span class="igreja-titulo">Compre para presentear</span>
             <p class="igreja-chamada">
-              <span class="igreja-destaque" data-igreja-min>acima de 10</span>
+              <span class="igreja-destaque" data-igreja-min>ACIMA DE 10</span>
               exemplares
             </p>
             <p class="igreja-preco">
@@ -2460,7 +2460,7 @@
         if (igreja.preco) {
           const minimo = igreja.minimo || 10
           all('[data-igreja-min]', e => {
-            e.textContent = 'acima de ' + minimo
+            e.textContent = 'ACIMA DE ' + minimo
           })
           all('[data-igreja-preco]', e => {
             e.textContent = igreja.preco
