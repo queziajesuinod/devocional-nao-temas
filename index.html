@@ -1122,7 +1122,7 @@
         font-family: var(--font-editorial);
         font-style: italic;
       }
-      /* Brinde exclusivo para os primeiros compradores */
+      /* Copo Bucks: adicional comprado junto com o devocional */
       .brinde-ex-num {
         display: inline-block;
         font-weight: 400;
@@ -1192,6 +1192,29 @@
         text-transform: uppercase;
         border: 1px dashed var(--floresta);
         padding: 7px 10px;
+      }
+      .combo-total {
+        display: flex;
+        flex-wrap: wrap;
+        align-items: baseline;
+        gap: 4px 14px;
+        font: 400 13px/1.2 var(--font-display);
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: var(--floresta);
+      }
+      .combo-total b {
+        font: 400 clamp(40px, 9vw, 54px)/1 var(--font-display);
+        letter-spacing: -0.02em;
+        text-transform: none;
+        font-variant-numeric: tabular-nums;
+      }
+      .combo-total .micro {
+        flex-basis: 100%;
+        font-family: var(--font-apoio);
+        text-transform: none;
+        letter-spacing: 0;
+        color: #4c4f44;
       }
       .brinde-ex-nota {
         color: #4c4f44;
@@ -1788,12 +1811,12 @@
         // Preço especial para igrejas na compra em volume. preco vazio = o bloco não aparece.
         igreja: { preco: 'R$ 49,90', minimo: 10 }, // preco: valor por exemplar. Ex.: "R$ 49,90". minimo: quantidade mínima de exemplares.
 
-        // Brinde para os primeiros compradores. quantidade 0 (ou vazio) = o bloco não aparece.
-        brindeExclusivo: {
-          quantidade: 150,
-          item: 'um Copo Bucks “Não Temas”',
-          foto: 'img/mockups/brinde-1600.webp' // caminho da imagem do devocional com o Copo Bucks (proporção 4:5), ex. "img/brinde-copo.jpg". Vazio = mostra um espaço tracejado.
-        }, // quantidade: nº de pedidos que ganham; item: o que ganham.
+        // Copo Bucks: adicional opcional comprado junto com o devocional. preco vazio = o bloco não aparece.
+        // A página soma esse valor ao preço do lote atual para mostrar o total do combo.
+        copoBucks: {
+          preco: 'R$ 9,90', // valor de cada copo
+          foto: 'img/mockups/brinde-1600.webp' // imagem do devocional com o Copo Bucks (proporção 4:5). Vazio = mostra um espaço tracejado.
+        },
 
         // Conteúdo (opcionais)
         autor: {
@@ -1959,7 +1982,7 @@
         <div class="in duas">
           <div class="foto-bloco revela">
             <span class="selo-brinde" aria-hidden="true"
-              >Para os<b data-brinde-qtd>150</b>primeiros</span
+              >Por + R$<b data-copo-valor>9,90</b>cada copo</span
             >
             <div class="brinde-foto zoom">
               <div class="brinde-foto-vazio" data-brinde-vazio>
@@ -1975,21 +1998,26 @@
             </div>
           </div>
           <div class="texto">
+            <span class="olho">Devocional + Copo Bucks</span>
             <h2>
-              Os primeiros
-              <span class="brinde-ex-num" data-brinde-qtd>150</span>
-              ganham um presente
+              Leve também o
+              <span class="brinde-ex-num">Copo Bucks</span>
             </h2>
-            <p data-brinde-texto>
-              Garanta o seu entre os primeiros pedidos e receba, junto com o
-              devocional, um Copo Bucks com a frase que guia o
-              devocional inteiro.
+            <p>
+              Junto com o devocional, leve o Copo Bucks com a frase que guia o
+              ano inteiro: <strong data-copo-preco>+ R$ 9,90</strong> por copo.
             </p>
-            <a class="btn" data-cta="brinde-copo" href="#oferta"
-              >Quero o meu com o Copo Bucks</a
+            <p class="combo-total" data-combo hidden>
+              Devocional + Copo Bucks
+              <b data-combo-total></b>
+              <span class="micro" data-combo-conta></span>
+            </p>
+            <a class="btn" data-cta="combo-copo" href="#oferta"
+              >Quero o devocional com o Copo Bucks</a
             >
             <p class="micro brinde-ex-nota">
-              Oferta válida enquanto durarem as unidades do brinde.
+              O Copo Bucks é opcional e pode ser comprado em mais de uma
+              unidade.
             </p>
           </div>
         </div>
@@ -2119,8 +2147,8 @@
             />
             <div class="oferta-copo" data-brinde-bloco hidden>
               <span
-                >Brinde para os primeiros
-                <b data-brinde-qtd>150</b></span
+                >Copo Bucks
+                <b data-copo-preco>+ R$ 9,90</b></span
               >
               <img
                 src="img/mockups/copo.webp"
@@ -2470,24 +2498,36 @@
           })
         }
 
-        /* ---------- Brinde para os primeiros compradores ---------- */
-        const brindeEx = P.brindeExclusivo || {}
-        if (brindeEx.quantidade) {
-          all('[data-brinde-qtd]', e => {
-            e.textContent = brindeEx.quantidade
+        /* ---------- Copo Bucks: adicional comprado junto com o devocional ---------- */
+        const copoB = P.copoBucks || {}
+        if (copoB.preco) {
+          // "R$ 59,90" -> 59.9 ; 69.8 -> "R$ 69,80"
+          const valor = t =>
+            parseFloat(String(t).replace(/[^\d,]/g, '').replace(',', '.'))
+          const real = v => 'R$ ' + v.toFixed(2).replace('.', ',')
+          const vCopo = valor(copoB.preco)
+          all('[data-copo-preco]', e => {
+            e.textContent = '+ ' + copoB.preco
           })
-          if (brindeEx.item)
-            all('[data-brinde-texto]', e => {
-              e.textContent =
-                'Garanta o seu entre os primeiros ' +
-                brindeEx.quantidade +
-                ' pedidos e receba, junto com o devocional, ' +
-                brindeEx.item +
-                '.'
+          all('[data-copo-valor]', e => {
+            e.textContent = copoB.preco.replace(/^R\$\s*/, '')
+          })
+          const vLivro = valor(P.precoPor)
+          if (!isNaN(vLivro) && !isNaN(vCopo)) {
+            all('[data-combo-total]', e => {
+              e.textContent = real(vLivro + vCopo)
             })
-          if (brindeEx.foto) {
+            all('[data-combo-conta]', e => {
+              e.textContent =
+                'devocional ' + P.precoPor + ' + Copo Bucks ' + copoB.preco
+            })
+            all('[data-combo]', e => {
+              e.hidden = false
+            })
+          }
+          if (copoB.foto) {
             all('[data-brinde-foto]', e => {
-              e.src = brindeEx.foto
+              e.src = copoB.foto
               e.hidden = false
             })
             all('[data-brinde-vazio]', e => {
