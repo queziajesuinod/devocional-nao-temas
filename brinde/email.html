@@ -1,0 +1,144 @@
+<!doctype html>
+<html lang="pt-BR" xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="x-apple-disable-message-reformatting" />
+    <title>Você ganhou o Copo Bucks Não Temas</title>
+    <!--
+      Modelo do e-mail do brinde. Feito em tabelas e com estilos em linha para funcionar em
+      Gmail, Outlook e celulares. O n8n troca os marcadores antes de enviar:
+        [[NOME]]       primeiro nome da pessoa
+        [[QTD]]        quantidade de copos do pedido: 1, 2, 3…
+        [[COPOS]]      "Copo Bucks" quando for 1, "Copos Bucks" quando for mais de 1
+      Cada exemplar comprado vale um copo; o pedido recebe um e-mail e um certificado.
+      Assunto sugerido: [[NOME]], você está entre os 150 primeiros e ganhou o Copo Bucks
+      Texto de prévia (aparece na caixa de entrada): está no primeiro <div> do corpo.
+    -->
+    <style>
+      @font-face {
+        font-family: 'Abril Fatface';
+        src: url('https://devocional.iecg.com.br/fonts/AbrilFatface-Regular.ttf') format('truetype');
+      }
+      body {
+        margin: 0;
+        padding: 0;
+        background: #e5cdb1;
+      }
+      a {
+        color: #323b28;
+      }
+      @media (max-width: 620px) {
+        .caixa {
+          width: 100% !important;
+        }
+        .pad {
+          padding-left: 22px !important;
+          padding-right: 22px !important;
+        }
+        .num {
+          font-size: 64px !important;
+        }
+        .col {
+          display: block !important;
+          width: 100% !important;
+        }
+        .col-copo {
+          padding: 0 0 18px !important;
+          text-align: center !important;
+        }
+      }
+    </style>
+  </head>
+  <body style="margin: 0; padding: 0; background: #e5cdb1">
+    <div style="display: none; max-height: 0; overflow: hidden; mso-hide: all">
+      Você está entre os 150 primeiros da pré-venda e ganhou o Copo Bucks “Não Temas”.
+    </div>
+
+    <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background: #e5cdb1">
+      <tr>
+        <td align="center" style="padding: 28px 12px">
+          <table role="presentation" class="caixa" width="600" cellpadding="0" cellspacing="0" border="0" style="width: 600px; max-width: 600px; background: #fbf7f1">
+            <!-- Topo -->
+            <tr>
+              <td class="pad" style="background: #323b28; padding: 20px 40px">
+                <span style="font-family: 'Abril Fatface', Georgia, serif; font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; color: #ead9c5">365 Vezes <span style="color: #cdccbd">Não Temas!</span></span>
+              </td>
+            </tr>
+
+            <!-- Número -->
+            <tr>
+              <td class="pad" align="center" style="background: #323b28; padding: 30px 40px 38px; border-top: 1px solid #55604a">
+                <p style="margin: 0 0 14px; font-family: Georgia, serif; font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: #cdccbd">Entre os 150 primeiros</p>
+                <p class="num" style="margin: 0; font-family: 'Abril Fatface', Georgia, serif; font-size: 88px; line-height: 0.9; letter-spacing: -2px; color: #ead9c5">[[QTD]]</p>
+                <p style="margin: 12px 0 0; font-family: 'Abril Fatface', Georgia, serif; font-size: 22px; text-transform: uppercase; color: #cdccbd">[[COPOS]] Não Temas</p>
+              </td>
+            </tr>
+
+            <!-- Mensagem -->
+            <tr>
+              <td class="pad" style="padding: 36px 40px 8px">
+                <h1 style="margin: 0 0 16px; font-family: 'Abril Fatface', Georgia, serif; font-weight: 400; font-size: 30px; line-height: 1.05; text-transform: uppercase; color: #323b28">[[NOME]], você ganhou um presente</h1>
+                <p style="margin: 0 0 14px; font-family: Georgia, serif; font-size: 17px; line-height: 1.6; color: #010101">
+                  Seu pagamento foi confirmado e o seu pedido do devocional <strong>365 Vezes Não Temas!</strong> está entre os primeiros da pré-venda, que ganham os <strong>150 Copos Bucks</strong>.
+                </p>
+                <p style="margin: 0; font-family: Georgia, serif; font-size: 17px; line-height: 1.6; color: #010101">
+                  Por isso, junto com o seu devocional, você vai receber de brinde <strong>[[QTD]] [[COPOS]] “Não Temas”</strong>.
+                </p>
+              </td>
+            </tr>
+
+            <!-- Cartão-presente -->
+            <tr>
+              <td class="pad" style="padding: 28px 40px">
+                <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="border: 2px dashed #323b28; background: #ffffff">
+                  <tr>
+                    <td class="col col-copo" width="150" valign="middle" style="width: 150px; padding: 20px 0 20px 20px; text-align: center">
+                      <img src="https://devocional.iecg.com.br/img/copo-email.png" width="120" alt="Copo Bucks Não Temas" style="display: inline-block; width: 120px; max-width: 120px; height: auto; border: 0" />
+                    </td>
+                    <td class="col" valign="middle" style="padding: 20px 22px">
+                      <p style="margin: 0 0 6px; font-family: Georgia, serif; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: #5b6152">Gift card · Brinde da pré-venda</p>
+                      <p style="margin: 0 0 10px; font-family: 'Abril Fatface', Georgia, serif; font-size: 24px; line-height: 1.05; text-transform: uppercase; color: #323b28">Copo Bucks<br />Não Temas</p>
+                      <p style="margin: 0; font-family: Georgia, serif; font-size: 14px; line-height: 1.5; color: #010101">
+                        Para: <strong>[[NOME]]</strong><br />
+                        [[QTD]] [[COPOS]] “Não Temas”<br />
+                        Enviado junto com o seu devocional
+                      </p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+
+            <!-- Anexo -->
+            <tr>
+              <td class="pad" align="center" style="padding: 0 40px 6px">
+                <p style="margin: 0; font-family: Georgia, serif; font-size: 15px; line-height: 1.5; color: #323b28"><strong>Seu certificado de brinde segue em anexo, em PDF.</strong><br />Guarde para conferir quando o devocional chegar.</p>
+              </td>
+            </tr>
+
+            <!-- Versículo -->
+            <tr>
+              <td class="pad" align="center" style="padding: 30px 40px 34px">
+                <p style="margin: 0; font-family: Georgia, serif; font-style: italic; font-size: 20px; line-height: 1.35; color: #323b28">“Lâmpada para os meus pés é tua palavra e luz, para o meu caminho.”</p>
+                <p style="margin: 10px 0 0; font-family: Georgia, serif; font-size: 13px; color: #5b6152">Salmos 119:105 ARC</p>
+              </td>
+            </tr>
+
+            <!-- Rodapé -->
+            <tr>
+              <td class="pad" style="background: #323b28; padding: 22px 40px">
+                <p style="margin: 0; font-family: Georgia, serif; font-size: 13px; line-height: 1.6; color: #cdccbd">
+                  Dúvidas? Fale com a gente pelo WhatsApp:
+                  <a href="https://wa.me/556784661644" style="color: #ead9c5">+55 67 8466-1644</a><br />
+                  365 Vezes Não Temas! · Edmilson Oliveira · Editora Essência 4:18<br />
+                  <a href="https://devocional.iecg.com.br" style="color: #ead9c5">devocional.iecg.com.br</a>
+                </p>
+              </td>
+            </tr>
+          </table>
+        </td>
+      </tr>
+    </table>
+  </body>
+</html>
