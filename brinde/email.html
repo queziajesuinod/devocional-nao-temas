@@ -11,6 +11,7 @@
         [[NOME]]       primeiro nome da pessoa
         [[QTD]]        quantidade de copos do pedido: 1, 2, 3…
         [[COPOS]]      "Copo Bucks" quando for 1, "Copos Bucks" quando for mais de 1
+        [[LINK_GIFT]]  link pessoal do gift card (cada clique é registrado na planilha)
       Cada exemplar comprado vale um copo; o pedido recebe um e-mail e um certificado.
       Assunto sugerido: [[NOME]], você está entre os 150 primeiros e ganhou o Copo Bucks
       Texto de prévia (aparece na caixa de entrada): está no primeiro <div> do corpo.
@@ -110,10 +111,17 @@
               </td>
             </tr>
 
-            <!-- Anexo -->
+            <!-- Botão do gift card -->
             <tr>
-              <td class="pad" align="center" style="padding: 0 40px 6px">
-                <p style="margin: 0; font-family: Georgia, serif; font-size: 15px; line-height: 1.5; color: #323b28"><strong>Seu certificado de brinde segue em anexo, em PDF.</strong><br />Guarde para conferir quando o devocional chegar.</p>
+              <td class="pad" align="center" style="padding: 0 40px 8px">
+                <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                  <tr>
+                    <td align="center" bgcolor="#323b28" style="background: #323b28">
+                      <a href="[[LINK_GIFT]]" target="_blank" style="display: inline-block; padding: 17px 34px; font-family: 'Abril Fatface', Georgia, serif; font-size: 16px; letter-spacing: 0.5px; text-transform: uppercase; text-decoration: none; color: #ead9c5">Ver meu gift card</a>
+                    </td>
+                  </tr>
+                </table>
+                <p style="margin: 14px 0 0; font-family: Georgia, serif; font-size: 13px; line-height: 1.5; color: #5b6152">No gift card você pode baixar o seu certificado em PDF.</p>
               </td>
             </tr>
 
